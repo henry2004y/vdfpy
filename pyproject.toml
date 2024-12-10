@@ -9,7 +9,7 @@ packages = [{include = "vdfpy", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 flekspy = "^0.1.0"
-pyvlasiator = "0.1.2"
+pyvlasiator = "^0.1.3"
 scikit-learn = "^1.5.2"
 scipy = "^1.14.1"
 pandas = "^2.2.3"
