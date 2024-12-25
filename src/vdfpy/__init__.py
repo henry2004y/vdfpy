@@ -2,22 +2,13 @@
 vdfpy Public API.
 """
 
-from .clustering import (
-    cluster
-)
+from .clustering import cluster
 
-import os
-import sys
-import glob
 import numpy as np
 import pandas as pd
-import scipy.stats as scs
 
 from pyvlasiator.vlsv import Vlsv
 import flekspy as fleks
-
-# import matplotlib as mpl
-# import matplotlib.pyplot as plt
 
 
 def collect_moments(filename: str, preprocessed: bool = True) -> pd.DataFrame:
@@ -64,10 +55,11 @@ def collect_moments(filename: str, preprocessed: bool = True) -> pd.DataFrame:
             feature["p"] = np.mean(v, axis=-1)
 
             data.append(feature)
-        
+
         df = pd.DataFrame(data)
 
     return df
+
 
 def load_mms(filename: str):
     print("TBD!")

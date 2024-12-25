@@ -8,6 +8,7 @@
 vdf.md
 distributions.ipynb
 generation.ipynb
+clustering.ipynb
 workflow.md
 changelog.md
 contributing.md
