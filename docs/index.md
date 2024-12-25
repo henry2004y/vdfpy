@@ -5,6 +5,10 @@
 :maxdepth: 1
 :hidden:
 
+vdf.md
+distributions.ipynb
+generation.ipynb
+workflow.md
 changelog.md
 contributing.md
 conduct.md
