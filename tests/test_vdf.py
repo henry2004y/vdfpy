@@ -2,11 +2,9 @@ import pytest
 import requests
 import tarfile
 import os
-import numpy as np
-from pyvlasiator.vlsv import Vlsv
-import matplotlib
 
 import vdfpy
+import vdfpy.generator
 
 filedir = os.path.dirname(__file__)
 
@@ -29,6 +27,13 @@ else:
         file.extractall(path)
     os.remove(testfiles)
 
+
+class TestGenerator:
+    def test_generate(self):
+        df = vdfpy.generator.make_clusters()
+        assert df.shape == (10, 4)
+
+
 class TestVlasiator:
     dir = "tests/data_vlasiator/"
     files = (dir + "bulk.1d.vlsv", dir + "bulk.2d.vlsv")
@@ -40,7 +45,6 @@ class TestVlasiator:
         assert sum(labels) == 7
         labels = vdfpy.cluster(df, n_clusters=2, method="GMM")
         assert sum(labels) == 6
-
 
     def test_method_error(self):
         with pytest.raises(Exception):
