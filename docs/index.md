@@ -11,7 +11,6 @@ generation.ipynb
 clustering.ipynb
 vlasiator.ipynb
 fleks.ipynb
-workflow.md
 changelog.md
 contributing.md
 conduct.md

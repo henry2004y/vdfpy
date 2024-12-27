@@ -31,9 +31,9 @@ else:
 class TestGenerator:
     def test_generate1d(self):
         df = vdfpy.generator.make_clusters()
-        assert df.shape == (10, 4)
+        assert df.shape == (10, 5)
         df = vdfpy.generator.make_clusters(n_clusters=1, n_samples=1)
-        assert df.shape == (1, 4)
+        assert df.shape == (1, 5)
         df = vdfpy.generator.make_clusters(
             n_clusters=3, n_points=2, n_samples=3, random_state=1
         )
@@ -43,11 +43,11 @@ class TestGenerator:
         df = vdfpy.generator.make_clusters(
             n_clusters=2, n_dims=2, n_points=10, n_samples=3
         )
-        assert df.shape == (3, 4)
+        assert df.shape == (3, 5)
         df = vdfpy.generator.make_clusters(
             n_clusters=1, n_dims=2, n_points=10, n_samples=2
         )
-        assert df.shape == (2, 4)
+        assert df.shape == (2, 5)
 
 
 class TestVlasiator:

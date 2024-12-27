@@ -38,6 +38,7 @@ def make_clusters(
         upper = rng.integers(1, n_points, size=n_samples)
         if n_clusters == 1:
             samples = [rng.normal(0, 1, size=u) for u in upper]
+            dclass = pd.Series(np.ones(n_samples, dtype=int), name="class")
         elif n_clusters == 2:
             ns1 = n_samples - math.ceil(n_samples / 2)
             s1 = [rng.normal(0, 1, size=upper[i]) for i in range(ns1)]
@@ -46,6 +47,12 @@ def make_clusters(
             s22 = [rng.normal(4, 1, size=upper[i] // 2) for i in range(ns1, n_samples)]
             s2 = [np.concatenate([arr1, arr2]) for arr1, arr2 in zip(s21, s22)]
             samples = s1 + s2
+            dclass = pd.Series(
+                np.concatenate(
+                    (np.ones(ns1, dtype=int), np.full(n_samples - ns1, 2, dtype=int))
+                ),
+                name="class",
+            )
         elif n_clusters == 3:
             ns2 = int(n_samples / 3 * 2)
             ns1 = int(n_samples / 3)
@@ -57,6 +64,16 @@ def make_clusters(
             s32 = [rng.normal(-4, 1, size=upper[i] // 2) for i in range(ns2, n_samples)]
             s3 = [np.concatenate([arr1, arr2]) for arr1, arr2 in zip(s31, s32)]
             samples = s1 + s2 + s3
+            dclass = pd.Series(
+                np.concatenate(
+                    (
+                        np.ones(ns1, dtype=int),
+                        np.full(ns2 - ns1, 2, dtype=int),
+                        np.full(n_samples - ns2, 3, dtype=int),
+                    )
+                ),
+                name="class",
+            )
 
         if shuffle:
             random.shuffle(samples)
@@ -66,13 +83,13 @@ def make_clusters(
         d2 = pd.Series([float(s.shape[0]) for s in samples], name="density")
         d3 = pd.Series([np.mean(s) for s in samples], name="bulk velocity")
         d4 = pd.Series([np.std(s.values) for s in samples], name="temperature")
-        df = pd.concat([d1, d2, d3, d4], axis=1)
     elif n_dims == 2:
         upper = rng.integers(1, n_points, size=n_samples)
         if n_clusters == 1:
             mean = [0, 0]
             cov = [[1, 0], [0, 1]]
             samples = [rng.multivariate_normal(mean, cov, size=u) for u in upper]
+            dclass = pd.Series(np.ones(n_samples, dtype=int), name="class")
         elif n_clusters == 2:
             ns1 = n_samples - math.ceil(n_samples / 2)
 
@@ -95,6 +112,12 @@ def make_clusters(
             s2 = [np.concatenate([arr1, arr2]) for arr1, arr2 in zip(s21, s22)]
 
             samples = s1 + s2
+            dclass = pd.Series(
+                np.concatenate(
+                    (np.ones(ns1, dtype=int), np.full(n_samples - ns1, 2, dtype=int))
+                ),
+                name="class",
+            )
 
         if shuffle:
             random.shuffle(samples)
@@ -107,6 +130,7 @@ def make_clusters(
         d4 = pd.Series(
             [np.mean(np.std(s, axis=0)) for s in samples], name="temperature"
         )
-        df = pd.concat([d1, d2, d3, d4], axis=1)
+
+    df = pd.concat([dclass, d1, d2, d3, d4], axis=1)
 
     return df
