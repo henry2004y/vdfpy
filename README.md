@@ -25,7 +25,8 @@ python -m pip install vdfpy
 
 ## Usage
 
-Please refer to the [documentation](https://henry2004y.github.io/vdfpy/).
+We currently support extracting data from simulation (Vlasiator, FLEKS) and satellite observation (pyspedas).
+Please refer to the [documentation](https://henry2004y.github.io/vdfpy/) for more details.
 
 ## License
 

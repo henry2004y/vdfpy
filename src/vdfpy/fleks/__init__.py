@@ -1,1 +1,1 @@
-from .fleks import collect_moments
+from .fleks import collect_moments, load

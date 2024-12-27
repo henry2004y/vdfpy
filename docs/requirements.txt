@@ -1,3 +1,7 @@
+flekspy
 myst-nb
+pyvlasiator
+pyspedas
+seaborn
 sphinx-autoapi
 sphinx-rtd-theme
