@@ -17,7 +17,6 @@ author = u"Hongyang Zhou"
 # ones.
 extensions = [
     "myst_nb",
-    "myst_parser",
     "autoapi.extension",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
