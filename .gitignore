@@ -5,6 +5,7 @@ coverage.xml
 dist/
 .vscode/
 *.tar.gz
+*.vlsv
 data/
 tests/data/
 *.pyc
