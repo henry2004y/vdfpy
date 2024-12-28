@@ -6,6 +6,7 @@ dist/
 .vscode/
 *.tar.gz
 *.vlsv
+*.txt
 data/
 tests/data/
 *.pyc
