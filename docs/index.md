@@ -7,7 +7,7 @@
 
 vdf.md
 distributions.ipynb
-generation.ipynb
+generator.ipynb
 clustering.ipynb
 vlasiator.ipynb
 fleks.ipynb
