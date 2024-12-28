@@ -1,6 +1,9 @@
 # vdfpy
 
 <p align="center">
+  <a href="https://badge.fury.io/py/vdfpy">
+    <img src="https://badge.fury.io/py/vdfpy.svg" alt="PyPI version" height="18">
+  </a>
   <a href="https://github.com/henry2004y/vdfpy/actions">
     <img src="https://github.com/henry2004y/vdfpy/actions/workflows/CI.yml/badge.svg">
   </a>
