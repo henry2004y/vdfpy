@@ -1,5 +1,6 @@
 flekspy
 myst-nb
+myst-parser
 pyvlasiator
 pyspedas
 seaborn
