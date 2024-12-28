@@ -1,0 +1,17 @@
+__pycache__/
+poetry.lock
+.coverage
+coverage.xml
+dist/
+.vscode/
+*.tar.gz
+*.vlsv
+data/
+tests/data/
+*.pyc
+
+# MacOS
+.DS_Store
+
+# Sphinx documentation
+docs/_build/
