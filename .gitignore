@@ -8,6 +8,7 @@ dist/
 *.vlsv
 *.txt
 *.cdf
+3d_particle*/
 data/
 tests/data/
 *.pyc
