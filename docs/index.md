@@ -12,6 +12,7 @@ dimensional-reduction.ipynb
 clustering.ipynb
 vlasiator.ipynb
 fleks.ipynb
+mms-fpi.ipynb
 changelog.md
 contributing.md
 conduct.md
