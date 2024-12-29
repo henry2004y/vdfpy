@@ -8,6 +8,7 @@
 vdf.md
 distributions.ipynb
 generator.ipynb
+dimensional-reduction.ipynb
 clustering.ipynb
 vlasiator.ipynb
 fleks.ipynb
