@@ -2,6 +2,6 @@
 
 <!--next-version-placeholder-->
 
-## v0.1.0 (29/11/2024)
+## v0.1.0 (2024/12/29)
 
 - First release of `vdfpy`!
