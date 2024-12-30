@@ -3,11 +3,14 @@ import requests
 import tarfile
 import os
 
+from flekspy.util import download_testfile
+
 import vdfpy
 import vdfpy.generator
 
 filedir = os.path.dirname(__file__)
 
+# Load Vlasiator test data
 if os.path.isfile(filedir + "/data_vlasiator/bulk.1d.vlsv"):
     pass
 else:
@@ -27,6 +30,12 @@ else:
         file.extractall(path)
     os.remove(testfiles)
 
+# Load FLEKS test data
+if os.path.isfile(filedir + "/data_fleks/Header"):
+    pass
+else:
+    url = "https://raw.githubusercontent.com/henry2004y/batsrus_data/master/3d_particle.tar.gz"
+    download_testfile(url, "tests/data_fleks")
 
 class TestGenerator:
     def test_generate1d(self):
@@ -66,3 +75,12 @@ class TestVlasiator:
         with pytest.raises(Exception):
             df = vdfpy.collect_moments(self.files[0])
             labels = vdfpy.cluster(df, method="none")
+
+
+class TestFLEKS:
+    dir = "tests/data_fleks/"
+    file = dir + "3d_*amrex"
+
+    def test_load(self):
+        df = vdfpy.fleks.load(self.file)
+        assert df.shape == (1,4)

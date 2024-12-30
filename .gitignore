@@ -7,6 +7,8 @@ dist/
 *.tar.gz
 *.vlsv
 *.txt
+*.cdf
+3d_particle*/
 data/
 tests/data/
 *.pyc
