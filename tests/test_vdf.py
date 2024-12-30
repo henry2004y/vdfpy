@@ -35,8 +35,6 @@ if os.path.isfile(filedir + "/data_fleks/Header"):
     pass
 else:
     url = "https://raw.githubusercontent.com/henry2004y/batsrus_data/master/3d_particle.tar.gz"
-    #TODO https://github.com/henry2004y/flekspy/issues/16
-    os.makedirs(filedir + "/data_fleks", exist_ok=True)
     download_testfile(url, "tests/data_fleks")
 
 class TestGenerator:

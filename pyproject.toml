@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vdfpy"
-version = "0.1.0"
+version = "0.1.1"
 description = "Velocity distribution function classifier"
 authors = ["Hongyang Zhou <hyzhou@umich.edu>"]
 readme = "README.md"
@@ -8,7 +8,7 @@ packages = [{include = "vdfpy", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-flekspy = "^0.2.0"
+flekspy = "^0.2.3"
 pyvlasiator = "^0.1.4"
 scikit-learn = "^1.5.2"
 scipy = "^1.14.1"
