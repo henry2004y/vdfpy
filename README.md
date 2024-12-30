@@ -1,4 +1,4 @@
-# vdfpy
+# VDFPy
 
 <p align="center">
   <a href="https://badge.fury.io/py/vdfpy">
@@ -18,7 +18,7 @@
   </a>
 </p>
 
-Velocity distribution classifier in Python.
+VDFPy is a velocity distribution function classifier in Python.
 
 ## Installation
 
