@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clustering Workflow &mdash; vdfpy  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Loading Vlasiator Data Into VDFpy" href="vlasiator.html" />
+    <link rel="prev" title="Dimension Reduction" href="dimension-reduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            vdfpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vdf.html">Fundamentals of Kinetic Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distributions.html">Introduction to General Distribution Functions in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generator.html">Generating Distribution Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimension-reduction.html">Dimension Reduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Clustering Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Data Preparation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#normalizing-the-data">Normalizing the data</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#modeling">Modeling</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fitting-the-model">Fitting the model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#evaluating-the-model">Evaluating the model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#choosing-the-best-number-of-clusters">Choosing the best number of clusters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#when-will-k-means-cluster-analysis-fail">When will k-means cluster analysis fail?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-demo">Quick Demo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vlasiator.html">Loading Vlasiator Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fleks.html">Loading FLEKS Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mms-fpi.html">Ion Distribution From MMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vdfpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Clustering Workflow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/clustering.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="clustering-workflow">
+<h1>Clustering Workflow<a class="headerlink" href="#clustering-workflow" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">vdfpy</span></code> takes velocity distribution functions (VDFs) from observation and simulation data, and clusters the distributions using unsupervised machine learning algorithms from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> and other population packages. We aim to provide uniform interfaces for data from different sources, and standard methods for training and evaluating the clustering performance. On the top level, the task is divided into several steps:</p>
+<ul class="simple">
+<li><p>Data preparation</p>
+<ul>
+<li><p>Data collection</p></li>
+<li><p>Data cleaning</p></li>
+<li><p>Feature engineering</p></li>
+<li><p>Data splitting</p></li>
+</ul>
+</li>
+<li><p>Modeling</p>
+<ul>
+<li><p>Hyperparameter tuning</p></li>
+<li><p>Training</p></li>
+<li><p>Predicting</p></li>
+<li><p>Assessing performance</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">import</span> <span class="nn">vdfpy</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="data-preparation">
+<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading"></a></h2>
+<p>Currently, we support VDF and plasma moment collection from simulation data of Vlasiator, and FLEKS, and observation data from MMS and MAVEN. For this tutorial, we generate pseudo-particle data from <code class="docutils literal notranslate"><span class="pre">vdfpy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">vdfpy.generator</span> <span class="kn">import</span> <span class="n">make_clusters</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">make_clusters</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>class</th>
+      <th>particle velocity</th>
+      <th>density</th>
+      <th>bulk velocity</th>
+      <th>temperature</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>vx
+0   1.269714
+1  -0.484702
+2   0.6...</td>
+      <td>33.0</td>
+      <td>0.062291</td>
+      <td>0.757375</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>vx
+0 -0.734136
+1  0.770994
+2  0.98843...</td>
+      <td>9.0</td>
+      <td>0.344572</td>
+      <td>1.000219</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>vx
+0   0.527443
+1   0.293697
+2  -1.2...</td>
+      <td>67.0</td>
+      <td>-0.079349</td>
+      <td>1.008849</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>vx
+0  -1.219661
+1   0.344993
+2   0.5...</td>
+      <td>85.0</td>
+      <td>0.154404</td>
+      <td>0.958812</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>vx
+0  -1.129424
+1  -1.447648
+2   1.6...</td>
+      <td>25.0</td>
+      <td>-0.368064</td>
+      <td>1.000766</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>3</td>
+      <td>vx
+0  -0.526728
+1   0.711446
+2  -1.0...</td>
+      <td>63.0</td>
+      <td>-1.370080</td>
+      <td>2.110039</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>3</td>
+      <td>vx
+0 -1.374929
+1  2.272116
+2  0.84043...</td>
+      <td>6.0</td>
+      <td>-0.914809</td>
+      <td>2.182220</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>3</td>
+      <td>vx
+0   0.594049
+1   0.437241
+2  -1.0...</td>
+      <td>33.0</td>
+      <td>-1.562680</td>
+      <td>2.210282</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>3</td>
+      <td>vx
+0  -0.142911
+1   0.602093
+2  -0.6...</td>
+      <td>81.0</td>
+      <td>-1.427195</td>
+      <td>2.189792</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>3</td>
+      <td>vx
+0  -0.197543
+1   0.241016
+2   0.3...</td>
+      <td>18.0</td>
+      <td>-1.796465</td>
+      <td>2.105182</td>
+    </tr>
+  </tbody>
+</table>
+<p>20 rows × 5 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+<span class="p">[</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/50b765dcbf291fd5d0c2459f6586ce71e75d560c1015a7b46b78650906d38e61.png" src="_images/50b765dcbf291fd5d0c2459f6586ce71e75d560c1015a7b46b78650906d38e61.png" />
+</div>
+</div>
+<section id="normalizing-the-data">
+<h3>Normalizing the data<a class="headerlink" href="#normalizing-the-data" title="Link to this heading"></a></h3>
+<p>When working with distance-based algorithms (e.g. k-Means), we must normalize the data. Otherwise, variables with different scaling will be weighted differently in the distance formula that is being optimized during training. For example, if we were to include velocity [km/s] in the cluster, in addition to density [amu/cc] and pressure [nPa], density would have an outsized impact on the optimizations because its scale is significantly larger and wider than the bounded location variables.</p>
+<p>We first set up training and test splits using <code class="docutils literal notranslate"><span class="pre">train_test_split</span></code> from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="s2">&quot;bulk velocity&quot;</span><span class="p">,</span> <span class="s2">&quot;temperature&quot;</span><span class="p">]],</span>
+    <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;class&quot;</span><span class="p">]],</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we normalize the training and test data using the <code class="docutils literal notranslate"><span class="pre">preprocessing.normalize</span></code> method from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="c1"># Scale the moments</span>
+<span class="n">X_train_norm</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test_norm</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">sklearn</span></code> provides several methods for data normalization and scaling. Check the documentation for more details.</p>
+</section>
+</section>
+<section id="modeling">
+<h2>Modeling<a class="headerlink" href="#modeling" title="Link to this heading"></a></h2>
+<section id="fitting-the-model">
+<h3>Fitting the model<a class="headerlink" href="#fitting-the-model" title="Link to this heading"></a></h3>
+<p>For the first iteration, we will arbitrarily choose a number of clusters of 3. Building and fitting models in <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> is very simple. We will create an instance of <code class="docutils literal notranslate"><span class="pre">KMeans</span></code>, define the number of clusters using the <code class="docutils literal notranslate"><span class="pre">n_clusters</span></code> attribute, set <code class="docutils literal notranslate"><span class="pre">n_init</span></code>, which defines the number of iterations the algorithm will run with different centroid seeds, to “auto”, and we will set the <code class="docutils literal notranslate"><span class="pre">random_state</span></code> to 0 so we get the same result each time we run the code.  We can then fit the model to the normalized training data using the <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.cluster</span> <span class="kn">import</span> <span class="n">KMeans</span>
+
+<span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+<span class="n">kmeans</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>#sk-container-id-1 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: #000;
+  --sklearn-color-text-muted: #666;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-1 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-1 pre {
+  padding: 0;
+}
+
+#sk-container-id-1 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-1 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-1 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-1 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-1 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-1 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-1 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-1 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-1 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-1 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-1 label.sk-toggleable__label {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+#sk-container-id-1 label.sk-toggleable__label .caption {
+  font-size: 0.6rem;
+  font-weight: lighter;
+  color: var(--sklearn-color-text-muted);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-1 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-1 div.sk-label label.sk-toggleable__label,
+#sk-container-id-1 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-1 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-1 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-1 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-1 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-1 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 0.5em;
+  text-align: center;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-1 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-1 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-1 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>KMeans(n_clusters=3, random_state=0)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow"><div><div>KMeans</div></div><div><a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.6/modules/generated/sklearn.cluster.KMeans.html">?<span>Documentation for KMeans</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></div></label><div class="sk-toggleable__content fitted"><pre>KMeans(n_clusters=3, random_state=0)</pre></div> </div></div></div></div></div></div>
+</div>
+<p>Once the data are fit, we can access labels from the <code class="docutils literal notranslate"><span class="pre">labels_</span></code> attribute.</p>
+</section>
+<section id="evaluating-the-model">
+<h3>Evaluating the model<a class="headerlink" href="#evaluating-the-model" title="Link to this heading"></a></h3>
+<p>Below, we visualize the data we just fit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3a276bbea99dd9605869179f42ccc32e5918561f767dc0f9e58f237e115c0c77.png" src="_images/3a276bbea99dd9605869179f42ccc32e5918561f767dc0f9e58f237e115c0c77.png" />
+</div>
+</div>
+<p>We can evaluate performance of the clustering algorithm using a Silhouette score which is a part of <code class="docutils literal notranslate"><span class="pre">sklearn.metrics</span></code> where a higher score (upper limit 1) represents a better fit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">silhouette_score</span>
+
+<span class="n">silhouette_score</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">,</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">labels_</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.5733699871140752
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="choosing-the-best-number-of-clusters">
+<h3>Choosing the best number of clusters<a class="headerlink" href="#choosing-the-best-number-of-clusters" title="Link to this heading"></a></h3>
+<p>The weakness of k-means clustering is that we don’t know how many clusters we need by just running the model. We need to test ranges of values and make a decision on the best value of k. We typically make a decision using the Elbow method to determine the optimal number of clusters where we are both not overfitting the data with too many clusters, and also not underfitting with too few.</p>
+<p>We create the below loop to test and store different model results so that we can make a decision on the best number of clusters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">K</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">fits</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">score</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Train the model for current value of k on training data, and append to lists</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">K</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">)</span>
+    <span class="n">fits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="n">score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">silhouette_score</span><span class="p">(</span><span class="n">X_train_norm</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">labels_</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">))</span>
+
+<span class="n">results_eval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="n">K</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">:</span> <span class="n">score</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Typically, as we increase the value of K, we see improvements in clusters and what they represent until a certain point. We then start to see diminishing returns or even worse performance. We can visually see this to help make a decision on the value of k by using an elbow plot where the y-axis is a measure of goodness of fit and the x-axis is the value of k.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">results_eval</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/8e025297404263ec60f75de62431bb2a2b3f44c7a9b04e421a21824e2344a73f.png" src="_images/8e025297404263ec60f75de62431bb2a2b3f44c7a9b04e421a21824e2344a73f.png" />
+</div>
+</div>
+<p>We typically choose the point where the improvements in performance start to flatten or get worse.</p>
+</section>
+<section id="when-will-k-means-cluster-analysis-fail">
+<h3>When will k-means cluster analysis fail?<a class="headerlink" href="#when-will-k-means-cluster-analysis-fail" title="Link to this heading"></a></h3>
+<p>K-means clustering performs best on data that are spherical. Spherical data are data that group in space in close proximity to each other either. This can be visualized in 2 or 3 dimensional space more easily. Data that aren’t spherical or should not be spherical do not work well with k-means clustering. For example, k-means clustering would not do well on the below data as we would not be able to find distinct centroids to cluster the two circles or arcs differently, despite them clearly visually being two distinct circles and arcs that should be labeled as such.</p>
+</section>
+</section>
+<section id="quick-demo">
+<h2>Quick Demo<a class="headerlink" href="#quick-demo" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">make_clusters</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="c1"># Scale the moments</span>
+<span class="n">data_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:])</span>
+<span class="n">df_scaled</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data_scaled</span><span class="p">)</span>
+<span class="n">df_scaled</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.542211</td>
+      <td>-1.058542</td>
+      <td>-0.866496</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-1.569997</td>
+      <td>-0.908429</td>
+      <td>-1.184732</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.290603</td>
+      <td>-1.028117</td>
+      <td>-0.929473</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.519000</td>
+      <td>0.959425</td>
+      <td>1.025932</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.660985</td>
+      <td>0.969032</td>
+      <td>1.073753</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.358379</td>
+      <td>1.066632</td>
+      <td>0.881018</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;kmeans&quot;</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">vdfpy</span><span class="o">.</span><span class="n">cluster</span><span class="p">(</span><span class="n">df_scaled</span><span class="p">,</span> <span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># clusters: 2; # samples: 6; # features: 3
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xrange</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">labels</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">labels</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">ylocs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">):</span>
+    <span class="n">ix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">labels</span> <span class="o">==</span> <span class="n">g</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xrange</span><span class="p">[</span><span class="n">ix</span><span class="p">],</span> <span class="n">ylocs</span><span class="p">[</span><span class="n">ix</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">g</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper center&quot;</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Pseudo distribution clustering, 2-class k-means&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/5d9d294716bed5c911a50fd806bde3870edf67dd99c642b128bf74634883acad.png" src="_images/5d9d294716bed5c911a50fd806bde3870edf67dd99c642b128bf74634883acad.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dimension-reduction.html" class="btn btn-neutral float-left" title="Dimension Reduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vlasiator.html" class="btn btn-neutral float-right" title="Loading Vlasiator Data Into VDFpy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

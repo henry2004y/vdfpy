@@ -1,0 +1,297 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Generating Distribution Functions\n",
+    "\n",
+    "NumPy provides efficient and flexible tools for random sampling. Earlier versions of numpy (< v1.17) uses `numpy.random` methods directly (e.g. `numpy.random.normal`); users of newer versions are recommended to use the `Generator` instance with `default_rng` and call the various methods on it to obtain samples from different distributions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "\n",
+    "sns.set_theme(rc={'figure.figsize':(10, 3)})\n",
+    "# For reproducibility\n",
+    "seed = 1234\n",
+    "rng = np.random.default_rng(seed)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## One-dimensional Distributions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Discrete distribution\n",
+    "\n",
+    "In the simplest case, if we have a discrete distribution (a set of values with associated probabilities), we can sample points like the following:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "population = [1, 2, 3, 4, 5]\n",
+    "probabilities = [0.1, 0.2, 0.3, 0.25, 0.15]\n",
+    "\n",
+    "samples = rng.choice(population, size=500, p=probabilities)\n",
+    "df_discrete = pd.DataFrame(samples, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_discrete,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"probability\",\n",
+    "                  discrete=True\n",
+    "                 )\n",
+    "hp.set(title=\"Discrete Distribution\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Summation of two Maxwellian distributions"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mean1, std1 = -2, 2\n",
+    "mean2, std2 = 4, 1\n",
+    "n1 = 9000\n",
+    "n2 = 1000\n",
+    "\n",
+    "samples1 = rng.normal(mean1, std1, size=n1)\n",
+    "samples2 = rng.normal(mean2, std2, size=n2)\n",
+    "samples = np.concatenate([samples1, samples2])\n",
+    "np.random.shuffle(samples) # Shuffle to mix the samples randomly\n",
+    "df_double_peak = pd.DataFrame(samples, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_double_peak,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"density\",\n",
+    "                  kde=True\n",
+    "                 )\n",
+    "hp.set(title=\"Mixture of two Maxwellian Distributions\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Two-dimensional Distributions"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 2D Maxwellian"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mean = [0, 0]\n",
+    "cov = [[1, 0], [0, 1]]\n",
+    "n1 = 5000\n",
+    "\n",
+    "samples = rng.multivariate_normal(mean, cov, size=n1)\n",
+    "df_double_peak_2d = pd.DataFrame(samples, columns=[\"x\", \"y\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, ax = plt.subplots(figsize=(7, 6), layout=\"constrained\")\n",
+    "hp = sns.histplot(df_double_peak_2d,\n",
+    "                  x=\"x\", y=\"y\",\n",
+    "                  stat=\"density\",\n",
+    "                  ax=ax,\n",
+    "                 )\n",
+    "hp.set(title=\"2D Maxwellian Distribution\")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 2D double-peak Maxwellian\n",
+    "\n",
+    "Here is an analytical construction of a mixture of two Maxwellian distribution in 2D. Note that the kernel density estimation in high dimension is an expensive operation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "mean = [0, 0]\n",
+    "cov = [[1, 0], [0, 1]]\n",
+    "n1 = 8000\n",
+    "samples1 = rng.multivariate_normal(mean, cov, size=n1)\n",
+    "\n",
+    "mean = [3, 3]\n",
+    "cov = [[1, 0], [0, 1]]\n",
+    "n2 = 2000\n",
+    "samples2 = rng.multivariate_normal(mean, cov, size=n2)\n",
+    "\n",
+    "samples = np.concatenate((samples1, samples2))\n",
+    "df_double_peak_2d = pd.DataFrame(samples, columns=[\"x\", \"y\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, ax = plt.subplots(figsize=(7, 6), layout=\"constrained\")\n",
+    "hp = sns.histplot(df_double_peak_2d,\n",
+    "                  x=\"x\", y=\"y\",\n",
+    "                  stat=\"density\",\n",
+    "                  ax=ax\n",
+    "                 )\n",
+    "hp.set(title=\"2D Double Peak Distribution\")\n",
+    "sns.kdeplot(df_double_peak_2d, x=\"x\", y=\"y\")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Generating Pseudo-Data from VDFpy\n",
+    "\n",
+    "In `VDFpy`, we provide a utility function `make_clusters` for generating pseudo-data for testing the clustering algorithms.\n",
+    "\n",
+    "### 1D\n",
+    "\n",
+    "For instance, to generate 10 samples of one-dimensional VDFs from 2 clusters: "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from vdfpy.generator import make_clusters\n",
+    "\n",
+    "df = make_clusters(n_clusters=2, n_dims=1, n_points=100, n_samples=3)\n",
+    "df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.kdeplot(df[\"particle velocity\"][0], x=\"vx\")\n",
+    "[sns.kdeplot(d, x=\"vx\") for d in df[\"particle velocity\"][1:]]\n",
+    "hp.set(title=\"Pseudo distributions, 2 classes\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 2D\n",
+    "\n",
+    "To generate 3 samples of two-dimensional distributions from 2 classes:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df = make_clusters(n_clusters=2, n_dims=2, n_points=30, n_samples=3)\n",
+    "df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "fig, ax = plt.subplots(figsize=(7, 6), layout=\"constrained\")\n",
+    "hp = sns.kdeplot(df[\"particle velocity\"][0], x=\"vx\", y=\"vy\", ax=ax, fill=True)\n",
+    "[sns.kdeplot(d, x=\"vx\", y=\"vy\", ax=ax, fill=True, alpha=0.5) for d in df[\"particle velocity\"][1:]]\n",
+    "hp.set(title=\"Pseudo distributions, 1 class\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "More detailed usages can be found in the documentation. Also note that kernel density estimation in high dimension (N > 1) is a very expensive operation; users are recommended to use `histplot` instead of `kdeplot` in general."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "vdfpy-L8WReCYd-py3.11",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

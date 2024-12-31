@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ion Distribution From MMS &mdash; vdfpy  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Loading FLEKS Data Into VDFpy" href="fleks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            vdfpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vdf.html">Fundamentals of Kinetic Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distributions.html">Introduction to General Distribution Functions in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generator.html">Generating Distribution Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimension-reduction.html">Dimension Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vlasiator.html">Loading Vlasiator Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fleks.html">Loading FLEKS Data Into VDFpy</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ion Distribution From MMS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#obtaining-mms-fpi-data">Obtaining MMS FPI Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-operations">Basic operations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fpi-ions-with-2d-interpolation">FPI ions with 2D interpolation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vdfpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Ion Distribution From MMS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mms-fpi.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ion-distribution-from-mms">
+<h1>Ion Distribution From MMS<a class="headerlink" href="#ion-distribution-from-mms" title="Link to this heading"></a></h1>
+<p>This notebook shows how to create 2D slices of 3D particle data from FPI using PySPEDAS. <code class="docutils literal notranslate"><span class="pre">pyspedas</span></code> is the Python implementation of SPEDAS orginally coded in IDL. It is not as feature-complete as the IDL version.</p>
+<section id="obtaining-mms-fpi-data">
+<h2>Obtaining MMS FPI Data<a class="headerlink" href="#obtaining-mms-fpi-data" title="Link to this heading"></a></h2>
+<p>Here is a recorded bi-directional field-aligned beam of 0-300 eV ions observed by FPI. Due to a bug in the <code class="docutils literal notranslate"><span class="pre">time</span></code> argument of <code class="docutils literal notranslate"><span class="pre">mms_part_slice2d</span></code>, we currently need to specify the start and end time of the interval as a list.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pytplot</span> <span class="kn">import</span> <span class="n">time_double</span><span class="p">,</span> <span class="n">time_string</span>
+
+<span class="n">time</span> <span class="o">=</span> <span class="s2">&quot;2017-09-10/09:32:20&quot;</span>
+<span class="n">window</span> <span class="o">=</span> <span class="mf">4.</span>
+<span class="n">trange</span> <span class="o">=</span> <span class="p">[</span><span class="n">time_double</span><span class="p">(</span><span class="n">time</span><span class="p">)</span><span class="o">-</span><span class="n">window</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">time_double</span><span class="p">(</span><span class="n">time</span><span class="p">)</span><span class="o">+</span><span class="n">window</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">time_string</span><span class="p">(</span><span class="n">trange</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;2017-09-10 09:32:18.000000&#39;, &#39;2017-09-10 09:32:22.000000&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The data is downloaded automatically to the <code class="docutils literal notranslate"><span class="pre">pydata</span></code> folder under the current directory if not found.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspedas.mms.particles.mms_part_slice2d</span> <span class="kn">import</span> <span class="n">mms_part_slice2d</span>
+
+<span class="n">mms_part_slice2d</span><span class="p">(</span>
+    <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+    <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;fpi&quot;</span><span class="p">,</span>
+    <span class="n">species</span><span class="o">=</span><span class="s2">&quot;i&quot;</span><span class="p">,</span>
+    <span class="n">rotation</span><span class="o">=</span><span class="s2">&quot;bv&quot;</span><span class="p">,</span>
+    <span class="n">erange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;turbo&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:46:52: Error while reading SDC username/password; defaulting to public user...
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:46:53: Downloading mms1_fpi_fast_l2_dis-dist_20170910080000_v3.4.0.cdf to pydata/mms1/fpi/fast/l2/dis-dist/2017/09
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:46:55: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:46:55: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:46:55: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:46:55: Downloading mms1_fgm_srvy_l2_20170910_v5.104.0.cdf to pydata/mms1/fgm/srvy/l2/2017/09
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:01: Downloading mms1_fpi_fast_l2_dis-moms_20170910080000_v3.4.0.cdf to pydata/mms1/fpi/fast/l2/dis-moms/2017/09
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:02: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:02: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:02: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:02: Averaging mms1_fgm_b_gse_srvy_l2_bvec
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:02: Averaging mms1_dis_bulkv_gse_fast
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:02: Aligning slice plane to: bv
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:03: Finished slice at 2017-09-10 09:32:19.446664
+</pre></div>
+</div>
+<img alt="_images/24174c950b9209402e1d48cac2bf68033b9eb987d8e68739a06b4c0c6aa57aed.png" src="_images/24174c950b9209402e1d48cac2bf68033b9eb987d8e68739a06b4c0c6aa57aed.png" />
+</div>
+</div>
+<section id="basic-operations">
+<h3>Basic operations<a class="headerlink" href="#basic-operations" title="Link to this heading"></a></h3>
+<p>To return the slice data structure instead of plotting, set the <code class="docutils literal notranslate"><span class="pre">return_slice</span></code> keyword to <code class="docutils literal notranslate"><span class="pre">True</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">the_slice</span> <span class="o">=</span> <span class="n">mms_part_slice2d</span><span class="p">(</span>
+    <span class="n">return_slice</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
+    <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;fpi&quot;</span><span class="p">,</span>
+    <span class="n">species</span><span class="o">=</span><span class="s2">&quot;i&quot;</span><span class="p">,</span>
+    <span class="n">rotation</span><span class="o">=</span><span class="s2">&quot;bv&quot;</span><span class="p">,</span>
+    <span class="n">erange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:04: Loading pydata/mms1/fpi/fast/l2/dis-dist/2017/09/mms1_fpi_fast_l2_dis-dist_20170910080000_v3.4.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:05: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:05: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:05: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:05: Loading pydata/mms1/fgm/srvy/l2/2017/09/mms1_fgm_srvy_l2_20170910_v5.104.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:10: Loading pydata/mms1/fpi/fast/l2/dis-moms/2017/09/mms1_fpi_fast_l2_dis-moms_20170910080000_v3.4.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:10: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:10: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:10: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:10: Averaging mms1_fgm_b_gse_srvy_l2_bvec
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:10: Averaging mms1_dis_bulkv_gse_fast
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:10: Aligning slice plane to: bv
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:11: Finished slice at 2017-09-10 09:32:19.446664
+</pre></div>
+</div>
+</div>
+</div>
+<p>The slice is stored as a dictionary:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">the_slice</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;project_name&#39;, &#39;spacecraft&#39;, &#39;data_name&#39;, &#39;units_name&#39;, &#39;species&#39;, &#39;xyunits&#39;, &#39;rotation&#39;, &#39;energy&#39;, &#39;trange&#39;, &#39;zrange&#39;, &#39;rrange&#39;, &#39;rlog&#39;, &#39;interpolation&#39;, &#39;n_samples&#39;, &#39;data&#39;, &#39;xgrid&#39;, &#39;ygrid&#39;])
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can create 1D cuts through the 2D slice by specifying the velocity range:</p>
+<p>(hyzhou: why is the unit still the same as in 2D/3D?)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspedas.particles.spd_slice2d.slice1d_plot</span> <span class="kn">import</span> <span class="n">plot</span>
+
+<span class="n">plot</span><span class="p">(</span><span class="n">the_slice</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>  <span class="c1"># summed from Vv=[-100, 100]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/310f02101440d5ccec6e7fc1bb98cf78996407945e00aa6dd0197842a71940e8.png" src="_images/310f02101440d5ccec6e7fc1bb98cf78996407945e00aa6dd0197842a71940e8.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="fpi-ions-with-2d-interpolation">
+<h2>FPI ions with 2D interpolation<a class="headerlink" href="#fpi-ions-with-2d-interpolation" title="Link to this heading"></a></h2>
+<p>The data are rotated such that the x axis is parallel to B field and the bulk velocity defines the x-y plane, and plotted using 2D interpolation (data points within the specified theta or z-axis range are projected onto the slice plane and linearly interpolated onto a regular 2D grid). The default theta range is [-20, +20].</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mms_part_slice2d</span><span class="p">(</span><span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;2d&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;fpi&quot;</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s2">&quot;bv&quot;</span><span class="p">,</span> <span class="n">erange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;turbo&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:12: Loading pydata/mms1/fpi/fast/l2/dis-dist/2017/09/mms1_fpi_fast_l2_dis-dist_20170910080000_v3.4.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:13: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:13: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:13: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:13: Loading pydata/mms1/fgm/srvy/l2/2017/09/mms1_fgm_srvy_l2_20170910_v5.104.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:17: Loading pydata/mms1/fpi/fast/l2/dis-moms/2017/09/mms1_fpi_fast_l2_dis-moms_20170910080000_v3.4.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:17: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:17: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:17: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:17: Averaging mms1_fgm_b_gse_srvy_l2_bvec
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:17: Averaging mms1_dis_bulkv_gse_fast
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:17: Aligning slice plane to: bv
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:18: Finished slice at 2017-09-10 09:32:19.446664
+</pre></div>
+</div>
+<img alt="_images/39f52dc60a525b4bbb1076985b74b220f8dab4991ff0cf4dd5dc782af714671b.png" src="_images/39f52dc60a525b4bbb1076985b74b220f8dab4991ff0cf4dd5dc782af714671b.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">slicemms2d</span> <span class="o">=</span> <span class="n">mms_part_slice2d</span><span class="p">(</span><span class="n">return_slice</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;2d&quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span> <span class="n">instrument</span><span class="o">=</span><span class="s2">&quot;fpi&quot;</span><span class="p">,</span> <span class="n">species</span><span class="o">=</span><span class="s2">&quot;i&quot;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s2">&quot;bv&quot;</span><span class="p">,</span> <span class="n">erange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:18: Loading pydata/mms1/fpi/fast/l2/dis-dist/2017/09/mms1_fpi_fast_l2_dis-dist_20170910080000_v3.4.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:19: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:19: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:19: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:19: Loading pydata/mms1/fgm/srvy/l2/2017/09/mms1_fgm_srvy_l2_20170910_v5.104.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: Loading pydata/mms1/fpi/fast/l2/dis-moms/2017/09/mms1_fpi_fast_l2_dis-moms_20170910080000_v3.4.0.cdf
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: The name mms1_dis_pitchangdist_lowen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: The name mms1_dis_pitchangdist_miden_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: The name mms1_dis_pitchangdist_highen_fast is currently not in pytplot
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: Averaging mms1_fgm_b_gse_srvy_l2_bvec
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: Averaging mms1_dis_bulkv_gse_fast
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: Aligning slice plane to: bv
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>31-Dec-24 02:47:24: Finished slice at 2017-09-10 09:32:19.446664
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">colors</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">slicemms2d</span><span class="p">[</span><span class="s2">&quot;xgrid&quot;</span><span class="p">],</span> <span class="n">slicemms2d</span><span class="p">[</span><span class="s2">&quot;ygrid&quot;</span><span class="p">],</span> <span class="n">slicemms2d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+               <span class="n">norm</span><span class="o">=</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="mf">1e-24</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">slicemms2d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])),</span>
+               <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;turbo&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1f5686026bcd6dbf6ece96f47da2998b4c76ff6d092467d2ba33b52e83737f83.png" src="_images/1f5686026bcd6dbf6ece96f47da2998b4c76ff6d092467d2ba33b52e83737f83.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fleks.html" class="btn btn-neutral float-left" title="Loading FLEKS Data Into VDFpy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dimension Reduction &mdash; vdfpy  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Clustering Workflow" href="clustering.html" />
+    <link rel="prev" title="Generating Distribution Functions" href="generator.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            vdfpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vdf.html">Fundamentals of Kinetic Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distributions.html">Introduction to General Distribution Functions in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generator.html">Generating Distribution Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dimension Reduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#data-preparation">Data Preparation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vlasiator.html">Loading Vlasiator Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fleks.html">Loading FLEKS Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mms-fpi.html">Ion Distribution From MMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vdfpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Dimension Reduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/dimension-reduction.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="dimension-reduction">
+<h1>Dimension Reduction<a class="headerlink" href="#dimension-reduction" title="Link to this heading"></a></h1>
+<p>Dimension reduction has a close relation to feature engineering. Before performing the clustering, we wish to keep the main features of data instead of dumping the whole raw data into the clustering models.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="data-preparation">
+<h2>Data Preparation<a class="headerlink" href="#data-preparation" title="Link to this heading"></a></h2>
+<p>When we have the raw data of discrete particle velocities at a given location, we first need to convert that into a distribution function. Here we take advantage of the Kernel Density Estimation (KDE) technique implemented in scikit-learn. Note that an alternative implementation exists in <code class="docutils literal notranslate"><span class="pre">seaborn</span></code> but for plotting purposes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KernelDensity</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">vdfpy.generator</span> <span class="kn">import</span> <span class="n">make_clusters</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">make_clusters</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>class</th>
+      <th>particle velocity</th>
+      <th>density</th>
+      <th>bulk velocity</th>
+      <th>temperature</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>vx
+0  -1.889013
+1  -0.174772
+2  -0.4...</td>
+      <td>47.0</td>
+      <td>-0.095871</td>
+      <td>0.864831</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>vx
+0  -0.810815
+1   0.752244
+2   0.2...</td>
+      <td>51.0</td>
+      <td>-0.083029</td>
+      <td>0.928393</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>vx
+0   0.616879
+1   2.547898
+2  -1.0...</td>
+      <td>75.0</td>
+      <td>-0.073963</td>
+      <td>0.989770</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>vx
+0   0.548405
+1  -1.065125
+2   1.8...</td>
+      <td>95.0</td>
+      <td>-0.201632</td>
+      <td>0.909026</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>vx
+0  0.782085
+1  0.134622
+2  0.26290...</td>
+      <td>4.0</td>
+      <td>0.099152</td>
+      <td>0.564061</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>3</td>
+      <td>vx
+0  -0.965805
+1  -1.218734
+2   0.5...</td>
+      <td>73.0</td>
+      <td>-1.205324</td>
+      <td>1.962643</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>3</td>
+      <td>vx
+0   0.528009
+1   0.129235
+2  -0.7...</td>
+      <td>18.0</td>
+      <td>-1.582758</td>
+      <td>1.908900</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>3</td>
+      <td>vx
+0    1.391988
+1   -0.746404
+2   ...</td>
+      <td>147.0</td>
+      <td>-1.354992</td>
+      <td>2.117926</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>3</td>
+      <td>vx
+0   -0.305792
+1   -1.474984
+2   ...</td>
+      <td>112.0</td>
+      <td>-1.399677</td>
+      <td>1.998004</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>3</td>
+      <td>vx
+0   -0.276332
+1    0.977128
+2   ...</td>
+      <td>144.0</td>
+      <td>-1.301792</td>
+      <td>2.110255</td>
+    </tr>
+  </tbody>
+</table>
+<p>50 rows × 5 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_features</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="n">X_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">n_features</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+<span class="n">density</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">n_features</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">isample</span><span class="p">,</span> <span class="n">pv</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">]):</span>
+    <span class="n">kde</span> <span class="o">=</span> <span class="n">KernelDensity</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="s2">&quot;silverman&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pv</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">log_den</span> <span class="o">=</span> <span class="n">kde</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">X_plot</span><span class="p">)</span>
+    <span class="n">density</span><span class="p">[</span><span class="n">isample</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_den</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X_plot</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">density</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2e076cf5ff1fb76951bf9faa46eb383f4f839cdefa1847b0072583c9e910f01e.png" src="_images/2e076cf5ff1fb76951bf9faa46eb383f4f839cdefa1847b0072583c9e910f01e.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+
+<span class="n">n_components</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_components</span><span class="p">)</span>
+<span class="n">pca</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set1&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;1st Principle Component&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;2nd Principle Component&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/90991cd0a5133681b945bb8d63dbbdac61479e8b461bc2822b2f35df92830b06.png" src="_images/90991cd0a5133681b945bb8d63dbbdac61479e8b461bc2822b2f35df92830b06.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">umap</span>
+
+<span class="n">reducer</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">density</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Set1&quot;</span><span class="p">)</span>
+<span class="n">xax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">get_xaxis</span><span class="p">()</span>
+<span class="n">xax</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">yax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span>
+<span class="n">yax</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;UMAP projection&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/.cache/pypoetry/virtualenvs/vdfpy-djU7PhlF-py3.11/lib/python3.11/site-packages/sklearn/utils/deprecation.py:151: FutureWarning: &#39;force_all_finite&#39; was renamed to &#39;ensure_all_finite&#39; in 1.6 and will be removed in 1.8.
+  warnings.warn(
+</pre></div>
+</div>
+<img alt="_images/2fb8067cf27eb81830c4c9faf2209a8ac97a9f19ced8496e634069165ce6b483.png" src="_images/2fb8067cf27eb81830c4c9faf2209a8ac97a9f19ced8496e634069165ce6b483.png" />
+</div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">umap</span></code> has its own <a class="reference external" href="https://umap-learn.readthedocs.io/en/latest/plotting.html#">plotting support</a> with some extra dependencies.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="generator.html" class="btn btn-neutral float-left" title="Generating Distribution Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="clustering.html" class="btn btn-neutral float-right" title="Clustering Workflow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,366 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Introduction to General Distribution Functions in Python"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Python contains many available ingredients for us to play with distributions. We use `numpy`, `scipy`, `pandas`, and `seaborn` in this introduction section. Note that the random number sampling can be done both in `numpy` and `scipy`, but we recommend using Generators from `numpy` if possible. `seaborn` is a nice visualization package for statistics built upon `matplotlib`. We wrap the samples using dataframes from `pandas` for direct access when plotting."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import seaborn as sns\n",
+    "\n",
+    "sns.set_theme(rc={'figure.figsize':(10,3)})\n",
+    "# For reproducibility\n",
+    "seed = 1234\n",
+    "rng = np.random.default_rng(seed)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Uniform Distribution"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# random numbers from uniform distribution\n",
+    "data_uniform = rng.uniform(-10, 10, size=10000)\n",
+    "df_uniform = pd.DataFrame(data_uniform, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_uniform,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"density\",\n",
+    "                  kde=True\n",
+    "                 )\n",
+    "hp.set(title=\"Uniform Distribution\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Normal Distribution\n",
+    "\n",
+    "The normal distribution, or Maxwellian distribution, is the most used distribution in a wide range of applications."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# generate random numbers from N(0,1)\n",
+    "data_normal = rng.normal(0, 1, size=10000)\n",
+    "df_normal = pd.DataFrame(data_normal, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_normal,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"density\",\n",
+    "                  kde=True\n",
+    "                 )\n",
+    "hp.set(title=\"Normal Distribution\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Referring to the [Maxwell-Boltzmann](https://en.wikipedia.org/wiki/Maxwell%E2%80%93Boltzmann_distribution) distribution, the Maxwell–Boltzmann distribution applies fundamentally to particle velocities in three dimensions, but turns out to depend only on the speed (the magnitude of the velocity) of the particles. A particle speed probability distribution indicates which speeds are more likely: a randomly chosen particle will have a speed selected randomly from the distribution, and is more likely to be within one range of speeds than another.\n",
+    "\n",
+    "The probability of the thermal-equilibrium speed can be directly computed from `scipy`:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import scipy.stats as stats\n",
+    "\n",
+    "data_maxwell = stats.maxwell.rvs(size=10000, scale=1)\n",
+    "df_maxwell = pd.DataFrame(data_maxwell, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_maxwell,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"density\",\n",
+    "                  kde=True\n",
+    "                 )\n",
+    "hp.set(title=\"Maxwell Distribution\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Gamma Distribution\n",
+    "\n",
+    "The gamma distribution is a two-parameter family of continuous probability distributions. While it is used rarely in its raw form but other popularly used distributions like exponential, chi-squared, erlang distributions are special cases of the gamma distribution. The gamma distribution can be parameterized in terms of a shape parameter {math}`\\alpha = k` and an inverse scale parameter {math}`\\beta = 1/\\theta`, called a rate parameter, the symbol {math}`\\Gamma(n)` is the gamma function and is defined as {math}`(n-1)!`:\n",
+    "\n",
+    "```{math}\n",
+    "f(x; \\alpha, \\beta) = \\frac{\\beta^\\alpha x^{\\alpha-1}e^{-\\beta x}}{\\Gamma(\\alpha)}\\quad \\text{for}\\, x>0\\,\\text{and}\\,\\alpha,\\beta >0\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_gamma = rng.gamma(5, size=20000)\n",
+    "df_gamma = pd.DataFrame(data_gamma, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_gamma,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"density\",\n",
+    "                  kde=True\n",
+    "                 )\n",
+    "hp.set(title=\"Gamma Distribution\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Exponential Distribution\n",
+    "\n",
+    "The exponential distribution describes the time between events in a Poisson point process, i.e., a process in which events occur continuously and independently at a constant average rate. It has a parameter {math}`\\lambda` called rate parameter, and its equation is described as:\n",
+    "\n",
+    "```{math}\n",
+    "f(x;\\lambda) = \\begin{cases}\n",
+    "\\lambda e^{-\\lambda x}&\\quad x \\ge 0 \\\\\n",
+    "0&\\quad x < 0\n",
+    "\\end{cases}\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_expon = rng.exponential(1, size=2000)\n",
+    "df_expon = pd.DataFrame(data_expon, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_expon,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"density\",\n",
+    "                  kde=True\n",
+    "                 )\n",
+    "hp.set(title=\"Exponential Distribution\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Poisson Distribution\n",
+    "\n",
+    "Poisson random variable is typically used to model the number of times an event happened in a time interval. For example, the number of users visited on a website in an interval can be thought of a Poisson process. Poisson distribution is described in terms of the rate ({math}`\\mu`) at which the events happen. An event can occur 0, 1, 2, … times in an interval. The average number of events in an interval is designated {math}`\\lambda`. Lambda is the event rate, also called the rate parameter. The probability of observing {math}`k` events in an interval is given by the equation:\n",
+    "\n",
+    "```{math}\n",
+    "p(k\\,\\text{events in interval}) = e^{-\\lambda}\\frac{\\lambda^k}{k!}\n",
+    "```\n",
+    "\n",
+    "Note: the normal distribution is a limiting case of Poisson distribution with the parameter {math}`\\lambda\\rightarrow\\infty`. Also, if the times between random events follow an exponential distribution with rate {math}`\\lambda`, then the total number of events in a time period of length {math}`t` follows the Poisson distribution with parameter {math}`\\lambda t`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_poisson = rng.poisson(3, size=10000)\n",
+    "df_poisson = pd.DataFrame(data_poisson, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_poisson,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"probability\",\n",
+    "                  kde=True,\n",
+    "                  discrete=True\n",
+    "                 )\n",
+    "hp.set(title=\"Poisson Distribution\");"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Binomial Distribution\n",
+    "\n",
+    "A distribution where only two outcomes are possible, such as success or failure, gain or loss, win or lose and where the probability of success and failure is same for all the trials is called a Binomial Distribution. However, The outcomes need not be equally likely, and each trial is independent of each other. The parameters of a binomial distribution are {math}`n` and {math}`p` where {math}`n` is the total number of trials, and {math}`p` is the probability of success in each trial. Its probability distribution function is given by\n",
+    "\n",
+    "```{math}\n",
+    "f(k,n,p) = Pr(k; n, p) = \\binom{n}{k} p^k (1-p)^{n-k}\n",
+    "```\n",
+    "\n",
+    "where\n",
+    "\n",
+    "```{math}\n",
+    "\\binom{n}{k} = \\frac{n!}{k!(n-k)!}\n",
+    "```\n",
+    "\n",
+    "Note: since the probability of success was greater than 0.5 the distribution is skewed towards the right side. Also, poisson distribution is a limiting case of a binomial distribution under the following conditions:\n",
+    "\n",
+    "1. The number of trials is indefinitely large, {math}`n \\rightarrow \\infty`.\n",
+    "2. The probability of success for each trial is same and indefinitely small, {math}`p\\rightarrow 0`.\n",
+    "3. {math}`np = \\lambda`, is finite.\n",
+    "\n",
+    "Normal distribution is another limiting form of binomial distribution under the following conditions:\n",
+    "\n",
+    "1. The number of trials is indefinitely large, {math}`n \\rightarrow \\infty`.\n",
+    "2. Both {math}`p` and {math}`q` are not indefinitely small."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_binom = rng.binomial(n=10, p=0.8, size=10000)\n",
+    "df_binom = pd.DataFrame(data_binom, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_binom,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"probability\",\n",
+    "                  kde=True,\n",
+    "                  discrete=True\n",
+    "                 )\n",
+    "hp.set(title=\"Binomial Distribution\");\n",
+    "hp.set_xlim(-0.5, 10.5)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Bernoulli Distribution\n",
+    "\n",
+    "A Bernoulli distribution has only two possible outcomes, namely 1 (success) and 0 (failure), and a single trial, for example, a coin toss. So the random variable {math}`X` which has a Bernoulli distribution can take value 1 with the probability of success, {math}`p`, and the value 0 with the probability of failure, {math}`q` or {math}`1-p`. The probabilities of success and failure need not be equally likely. The Bernoulli distribution is a special case of the binomial distribution where a single trial is conducted ({math}`n=1`). Its probability mass function is given by:\n",
+    "\n",
+    "```{math}\n",
+    "f(k, p) = p^k (1-p)^{1-k} \\quad k \\in {0,1}\n",
+    "```"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data_bern = rng.binomial(n=1, p=0.6, size=10000)\n",
+    "df_bern = pd.DataFrame(data_bern, columns=[\"x\"])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hp = sns.histplot(df_bern,\n",
+    "                  x=\"x\",\n",
+    "                  stat=\"probability\",\n",
+    "                  discrete=True\n",
+    "                 )\n",
+    "hp.set(title=\"Bernoulli Distribution\");"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "vdfpy-L8WReCYd-py3.11",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

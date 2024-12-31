@@ -1,0 +1,6 @@
+vdfpy.vdfpy
+===========
+
+.. py:module:: vdfpy.vdfpy
+
+

@@ -1,0 +1,19 @@
+vdfpy.vlasiator.vlasiator
+=========================
+
+.. py:module:: vdfpy.vlasiator.vlasiator
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   vdfpy.vlasiator.vlasiator.collect_moments
+
+
+Module Contents
+---------------
+
+.. py:function:: collect_moments(filename: str, preprocessed: bool = True) -> pandas.DataFrame
+

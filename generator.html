@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generating Distribution Functions &mdash; vdfpy  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Dimension Reduction" href="dimension-reduction.html" />
+    <link rel="prev" title="Introduction to General Distribution Functions in Python" href="distributions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            vdfpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vdf.html">Fundamentals of Kinetic Theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distributions.html">Introduction to General Distribution Functions in Python</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Generating Distribution Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#one-dimensional-distributions">One-dimensional Distributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#discrete-distribution">Discrete distribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#summation-of-two-maxwellian-distributions">Summation of two Maxwellian distributions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#two-dimensional-distributions">Two-dimensional Distributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d-maxwellian">2D Maxwellian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#d-double-peak-maxwellian">2D double-peak Maxwellian</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-pseudo-data-from-vdfpy">Generating Pseudo-Data from VDFpy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d">1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">2D</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dimension-reduction.html">Dimension Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vlasiator.html">Loading Vlasiator Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fleks.html">Loading FLEKS Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mms-fpi.html">Ion Distribution From MMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vdfpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Generating Distribution Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/generator.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="generating-distribution-functions">
+<h1>Generating Distribution Functions<a class="headerlink" href="#generating-distribution-functions" title="Link to this heading"></a></h1>
+<p>NumPy provides efficient and flexible tools for random sampling. Earlier versions of numpy (&lt; v1.17) uses <code class="docutils literal notranslate"><span class="pre">numpy.random</span></code> methods directly (e.g. <code class="docutils literal notranslate"><span class="pre">numpy.random.normal</span></code>); users of newer versions are recommended to use the <code class="docutils literal notranslate"><span class="pre">Generator</span></code> instance with <code class="docutils literal notranslate"><span class="pre">default_rng</span></code> and call the various methods on it to obtain samples from different distributions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">rc</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">:(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)})</span>
+<span class="c1"># For reproducibility</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="one-dimensional-distributions">
+<h2>One-dimensional Distributions<a class="headerlink" href="#one-dimensional-distributions" title="Link to this heading"></a></h2>
+<section id="discrete-distribution">
+<h3>Discrete distribution<a class="headerlink" href="#discrete-distribution" title="Link to this heading"></a></h3>
+<p>In the simplest case, if we have a discrete distribution (a set of values with associated probabilities), we can sample points like the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">population</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="n">probabilities</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">]</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">population</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">probabilities</span><span class="p">)</span>
+<span class="n">df_discrete</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hp</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df_discrete</span><span class="p">,</span>
+                  <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+                  <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;probability&quot;</span><span class="p">,</span>
+                  <span class="n">discrete</span><span class="o">=</span><span class="kc">True</span>
+                 <span class="p">)</span>
+<span class="n">hp</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Discrete Distribution&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/3062705f65393dd7e2b3beae02efd9507bee4f3baf93eddb482aba750227ce28.png" src="_images/3062705f65393dd7e2b3beae02efd9507bee4f3baf93eddb482aba750227ce28.png" />
+</div>
+</div>
+</section>
+<section id="summation-of-two-maxwellian-distributions">
+<h3>Summation of two Maxwellian distributions<a class="headerlink" href="#summation-of-two-maxwellian-distributions" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean1</span><span class="p">,</span> <span class="n">std1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span>
+<span class="n">mean2</span><span class="p">,</span> <span class="n">std2</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span>
+<span class="n">n1</span> <span class="o">=</span> <span class="mi">9000</span>
+<span class="n">n2</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">samples1</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean1</span><span class="p">,</span> <span class="n">std1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n1</span><span class="p">)</span>
+<span class="n">samples2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mean2</span><span class="p">,</span> <span class="n">std2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n2</span><span class="p">)</span>
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">samples1</span><span class="p">,</span> <span class="n">samples2</span><span class="p">])</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span> <span class="c1"># Shuffle to mix the samples randomly</span>
+<span class="n">df_double_peak</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hp</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df_double_peak</span><span class="p">,</span>
+                  <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+                  <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span>
+                  <span class="n">kde</span><span class="o">=</span><span class="kc">True</span>
+                 <span class="p">)</span>
+<span class="n">hp</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mixture of two Maxwellian Distributions&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/ba4d6bde203106be25730b1f2a85da41f7d419fe979d3e41ceeefde3f83342f7.png" src="_images/ba4d6bde203106be25730b1f2a85da41f7d419fe979d3e41ceeefde3f83342f7.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="two-dimensional-distributions">
+<h2>Two-dimensional Distributions<a class="headerlink" href="#two-dimensional-distributions" title="Link to this heading"></a></h2>
+<section id="d-maxwellian">
+<h3>2D Maxwellian<a class="headerlink" href="#d-maxwellian" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">n1</span> <span class="o">=</span> <span class="mi">5000</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n1</span><span class="p">)</span>
+<span class="n">df_double_peak_2d</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+<span class="n">hp</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df_double_peak_2d</span><span class="p">,</span>
+                  <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                  <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span>
+                  <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                 <span class="p">)</span>
+<span class="n">hp</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;2D Maxwellian Distribution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/48eda0a1c735b075f13095c76f3327116610893b78320916e18275ee88afb268.png" src="_images/48eda0a1c735b075f13095c76f3327116610893b78320916e18275ee88afb268.png" />
+</div>
+</div>
+</section>
+<section id="d-double-peak-maxwellian">
+<h3>2D double-peak Maxwellian<a class="headerlink" href="#d-double-peak-maxwellian" title="Link to this heading"></a></h3>
+<p>Here is an analytical construction of a mixture of two Maxwellian distribution in 2D. Note that the kernel density estimation in high dimension is an expensive operation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mean</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">n1</span> <span class="o">=</span> <span class="mi">8000</span>
+<span class="n">samples1</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n1</span><span class="p">)</span>
+
+<span class="n">mean</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">n2</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">samples2</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">cov</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n2</span><span class="p">)</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">samples1</span><span class="p">,</span> <span class="n">samples2</span><span class="p">))</span>
+<span class="n">df_double_peak_2d</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+<span class="n">hp</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df_double_peak_2d</span><span class="p">,</span>
+                  <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+                  <span class="n">stat</span><span class="o">=</span><span class="s2">&quot;density&quot;</span><span class="p">,</span>
+                  <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+                 <span class="p">)</span>
+<span class="n">hp</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;2D Double Peak Distribution&quot;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">df_double_peak_2d</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/8be68cce54b3bd387612bf030e34847864655adc5f7c4b590d5e426a26fc4732.png" src="_images/8be68cce54b3bd387612bf030e34847864655adc5f7c4b590d5e426a26fc4732.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="generating-pseudo-data-from-vdfpy">
+<h2>Generating Pseudo-Data from VDFpy<a class="headerlink" href="#generating-pseudo-data-from-vdfpy" title="Link to this heading"></a></h2>
+<p>In <code class="docutils literal notranslate"><span class="pre">VDFpy</span></code>, we provide a utility function <code class="docutils literal notranslate"><span class="pre">make_clusters</span></code> for generating pseudo-data for testing the clustering algorithms.</p>
+<section id="d">
+<h3>1D<a class="headerlink" href="#d" title="Link to this heading"></a></h3>
+<p>For instance, to generate 10 samples of one-dimensional VDFs from 2 clusters:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">vdfpy.generator</span> <span class="kn">import</span> <span class="n">make_clusters</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">make_clusters</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>class</th>
+      <th>particle velocity</th>
+      <th>density</th>
+      <th>bulk velocity</th>
+      <th>temperature</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>vx
+0  -0.947819
+1   0.667292
+2  -1.3...</td>
+      <td>85.0</td>
+      <td>0.075374</td>
+      <td>1.139530</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>vx
+0   0.241391
+1   1.300642
+2  -0.8...</td>
+      <td>94.0</td>
+      <td>1.379030</td>
+      <td>2.182799</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>vx
+0   0.860236
+1  -1.186913
+2  -1.1...</td>
+      <td>27.0</td>
+      <td>1.073050</td>
+      <td>2.180692</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hp</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;vx&quot;</span><span class="p">)</span>
+<span class="p">[</span><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;vx&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]]</span>
+<span class="n">hp</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pseudo distributions, 2 classes&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/d57bfe47a273c3899412a17a15dff2a71b137fc63a45340ef18acee4495c767e.png" src="_images/d57bfe47a273c3899412a17a15dff2a71b137fc63a45340ef18acee4495c767e.png" />
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>2D<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>To generate 3 samples of two-dimensional distributions from 2 classes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">make_clusters</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_dims</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_points</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>class</th>
+      <th>particle velocity</th>
+      <th>density</th>
+      <th>bulk velocity</th>
+      <th>temperature</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>vx        vy
+0   0.459237 -0.416954
+...</td>
+      <td>16.0</td>
+      <td>vx    0.297316
+vy   -0.380066
+dtype: float64</td>
+      <td>0.861148</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>vx        vy
+0   1.631649 -1.420858
+...</td>
+      <td>36.0</td>
+      <td>vx    1.351862
+vy    1.057606
+dtype: float64</td>
+      <td>2.082108</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>vx        vy
+0 -0.123663  1.762656
+1 ...</td>
+      <td>10.0</td>
+      <td>vx    1.003698
+vy    1.231401
+dtype: float64</td>
+      <td>2.307296</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;constrained&quot;</span><span class="p">)</span>
+<span class="n">hp</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="p">[</span><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;particle velocity&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]]</span>
+<span class="n">hp</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Pseudo distributions, 1 class&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f74dddea7231819f49015f2bb21d5795bf9229d45ae8e8c7eb55f1bf1aca709a.png" src="_images/f74dddea7231819f49015f2bb21d5795bf9229d45ae8e8c7eb55f1bf1aca709a.png" />
+</div>
+</div>
+<p>More detailed usages can be found in the documentation. Also note that kernel density estimation in high dimension (N &gt; 1) is a very expensive operation; users are recommended to use <code class="docutils literal notranslate"><span class="pre">histplot</span></code> instead of <code class="docutils literal notranslate"><span class="pre">kdeplot</span></code> in general.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="distributions.html" class="btn btn-neutral float-left" title="Introduction to General Distribution Functions in Python" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="dimension-reduction.html" class="btn btn-neutral float-right" title="Dimension Reduction" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

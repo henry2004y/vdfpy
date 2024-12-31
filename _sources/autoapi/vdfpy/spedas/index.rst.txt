@@ -1,0 +1,15 @@
+vdfpy.spedas
+============
+
+.. py:module:: vdfpy.spedas
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/vdfpy/spedas/spedas/index
+
+

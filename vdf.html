@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fundamentals of Kinetic Theory &mdash; vdfpy  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction to General Distribution Functions in Python" href="distributions.html" />
+    <link rel="prev" title="VDFPy" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            vdfpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fundamentals of Kinetic Theory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#phase-space">Phase Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distribution-function">Distribution Function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#moments-of-the-distribution-function">Moments of the distribution function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#maxwellian-distribution">Maxwellian Distribution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#gallery">Gallery</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="distributions.html">Introduction to General Distribution Functions in Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="generator.html">Generating Distribution Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dimension-reduction.html">Dimension Reduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="clustering.html">Clustering Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vlasiator.html">Loading Vlasiator Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fleks.html">Loading FLEKS Data Into VDFpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mms-fpi.html">Ion Distribution From MMS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">vdfpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fundamentals of Kinetic Theory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/vdf.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fundamentals-of-kinetic-theory">
+<h1>Fundamentals of Kinetic Theory<a class="headerlink" href="#fundamentals-of-kinetic-theory" title="Link to this heading"></a></h1>
+<section id="phase-space">
+<h2>Phase Space<a class="headerlink" href="#phase-space" title="Link to this heading"></a></h2>
+<p>Consider a particle moving in a one-dimensional space and let the position of the particle be <span class="math notranslate nohighlight">\(x = x(t)\)</span> and the velocity of the particle be <span class="math notranslate nohighlight">\(v = v(t)\)</span>. A way to visualize the <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(v\)</span> trajectories simultaneously is to plot these trajectories parametrically on a two-dimensional graph, where the horizontal coordinate is given by <span class="math notranslate nohighlight">\(x(t)\)</span> and the vertical coordinate is given by <span class="math notranslate nohighlight">\(v(t)\)</span>. This x-v plane is called <em>phase-space</em>. The trajectory (or orbit) of several particles can be represented as a set of curves in phase-space. Examples of a few qualitatively different phase-space orbits are shown in the following figure.</p>
+<p><img alt="Phase-space showing different types of possible particle orbits." src="https://henry2004y.github.io/KeyNotes/images/phase_space_trajectories.png" />{#fig:phase-space}.</p>
+<p>Particles in the upper half-plane always move to the right, since they have a positive velocity, while those in the lower half-plane always move to the left. Particles having exact periodic motion (e.g., <span class="math notranslate nohighlight">\(x = A\cos t,\, v = −A\sin t\)</span>) alternate between moving to the right and the left and so describe an ellipse in phase-space. Particles with quasi-periodic motions will have near-ellipses or spiral orbits. A particle that does not reverse direction is called a passing particle, while a particle confined to a certain region of phase-space (e.g., a particle with periodic motion) is called a trapped particle.</p>
+</section>
+<section id="distribution-function">
+<h2>Distribution Function<a class="headerlink" href="#distribution-function" title="Link to this heading"></a></h2>
+<p>The fluid theory is the simplest description of a plasma; it is indeed fortunate that this approximation is sufficiently accurate to describe the majority of observed phenomena. There are some phenomena, however, for which a fluid treatment is inadequate. At any given time, each particle has a specific position and velocity. We can therefore characterize the instantaneous configuration of a large number of particles by specifying the density of particles at each point <span class="math notranslate nohighlight">\(x, v\)</span> in phase-space. The function prescribing the instantaneous density of particles in phase-space is called the <em>distribution function</em> and is denoted by <span class="math notranslate nohighlight">\(f(x, v, t)\)</span>. Thus, <span class="math notranslate nohighlight">\(f(x, v, t)\mathrm{d}x\mathrm{d}v\)</span> is the number of particles at time <span class="math notranslate nohighlight">\(t\)</span> having positions in the range between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(x+\mathrm{d}x\)</span> and velocities in the range between <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(v+\mathrm{d}v\)</span>. As time progresses, the particle motion and acceleration causes the number of particles in these <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(v\)</span> ranges to change and so <span class="math notranslate nohighlight">\(f\)</span> will change. This temporal evolution of <span class="math notranslate nohighlight">\(f\)</span> gives a description of the system more detailed than a fluid description, but less detailed than following the trajectory of each individual particle. Using the evolution of <span class="math notranslate nohighlight">\(f\)</span> to characterize the system does not keep track of the trajectories of individual particles, but rather characterizes classes of particles having the same <span class="math notranslate nohighlight">\(x, v\)</span>.</p>
+<p>In fluid theory, the dependent variables are functions of only four independent variables: <span class="math notranslate nohighlight">\(x, y, z,\)</span> and <span class="math notranslate nohighlight">\(t\)</span>. This is possible because the velocity distribution of each species is assumed to be Maxwellian everywhere and can therefore be uniquely specified by its bulk velocity <span class="math notranslate nohighlight">\(\vec{U}\)</span> and the temperature <span class="math notranslate nohighlight">\(T\)</span>. Since collisions can be rare in high-temperature plasmas, deviations from thermal equilibrium can be maintained for relatively long times. As an example, consider two velocity distributions <span class="math notranslate nohighlight">\(f_1(v_x)\)</span> and <span class="math notranslate nohighlight">\(f_2(v_x)\)</span> in a one-dimensional system (figure below). These two distributions will have entirely different behaviors, but as long as the areas under the curves are the same, fluid theory does not distinguish between them.</p>
+<p><img alt="Examples of non-Maxwellian distribution functions" src="https://henry2004y.github.io/KeyNotes/images/distributions_nonmaxwellian_1d.png" />{#fig-distributions-1d}</p>
+<p>When we consider velocity distributions in 3D, we have seven independent variables: <span class="math notranslate nohighlight">\(f = f(\mathbf{r}, \mathbf{v}, t)\)</span>.
+By <span class="math notranslate nohighlight">\(f(\mathbf{r}, \mathbf{v}, t)\)</span>, we mean that the number of particles per meter cubed at position <span class="math notranslate nohighlight">\(\mathbf{r}\)</span> and time <span class="math notranslate nohighlight">\(t\)</span> with velocity components between <span class="math notranslate nohighlight">\(v_x\)</span> and <span class="math notranslate nohighlight">\(v_x + \mathrm{d}v_x\)</span>, <span class="math notranslate nohighlight">\(v_y\)</span> and <span class="math notranslate nohighlight">\(v_y + \mathrm{d}v_y\)</span>, and <span class="math notranslate nohighlight">\(v_z\)</span> and <span class="math notranslate nohighlight">\(v_z + \mathrm{d}v_z\)</span> is</p>
+<div class="math notranslate nohighlight" id="equation-vdf3d">
+<span class="eqno">(1)<a class="headerlink" href="#equation-vdf3d" title="Link to this equation"></a></span>\[f(x, y, z, v_x, v_y, v_z, t) \mathrm{d}v_x \mathrm{d}v_y \mathrm{d}v_z\]</div>
+<section id="moments-of-the-distribution-function">
+<h3>Moments of the distribution function<a class="headerlink" href="#moments-of-the-distribution-function" title="Link to this heading"></a></h3>
+<p><img alt="Moments give weighted averages of the particles in the shaded vertical strip." src="https://henry2004y.github.io/KeyNotes/images/distribution_moments.png" />{#fig-distribution-moments}</p>
+<p>Let us count the particles in the shaded vertical strip in the above figure. The number of particles in this strip is the number of particles lying between <span class="math notranslate nohighlight">\(x\)</span> and <span class="math notranslate nohighlight">\(x + \mathrm{d}x\)</span>, where <span class="math notranslate nohighlight">\(x\)</span> is the location of the left-hand side of the strip and <span class="math notranslate nohighlight">\(x + \mathrm{d}x\)</span> is the location of the right-hand side. The number of particles in the strip is equivalently defined as <span class="math notranslate nohighlight">\(n(x, t)\mathrm{d}x\)</span>, where <span class="math notranslate nohighlight">\(n(x)\)</span> is the density of particles at <span class="math notranslate nohighlight">\(x\)</span>. Thus we see that <span class="math notranslate nohighlight">\(\int f(x, v)\mathrm{d}v = n(x)\)</span> the transition from a phase-space description (i.e., <span class="math notranslate nohighlight">\(x, v\)</span> are independent variables) to a conventional description (i.e., only <span class="math notranslate nohighlight">\(x\)</span> is an independent variable) involves “integrating out” the velocity dependence to obtain a quantity (e.g., density) depending only on position. Since the number of particles is finite, and since <span class="math notranslate nohighlight">\(f\)</span> is a positive quantity, <span class="math notranslate nohighlight">\(f\)</span> must vanish as <span class="math notranslate nohighlight">\(v\rightarrow\pm\infty\)</span>.</p>
+<p>In three-dimension, the density is now a function of four scalar variables, <span class="math notranslate nohighlight">\(n=n(\mathbf{r}, t)\)</span>, which is the integral of the distribution function over the velocity space:</p>
+<div class="math notranslate nohighlight" id="equation-distribution-density">
+<span class="eqno">(2)<a class="headerlink" href="#equation-distribution-density" title="Link to this equation"></a></span>\[\begin{split}\begin{aligned}
+  n(\mathbf{r}, t) &amp;= \int_{-\infty}^{\infty} \mathrm{d}v_x \int_{-\infty}^{\infty} \mathrm{d}v_y \int_{-\infty}^{\infty} \mathrm{d}v_z f(\mathbf{r}, \mathbf{v}, t) \\
+  &amp;= \int_{-\infty}^{\infty}f(\mathbf{r}, \mathbf{v}, t)\mathrm{d}^3v \\
+  &amp;= \int_{-\infty}^{\infty}f(\mathbf{r}, \mathbf{v}, t)\mathrm{d}\mathbf{v}
+\end{aligned}\end{split}\]</div>
+<p>Note that <span class="math notranslate nohighlight">\(\mathrm{d}\mathbf{v}\)</span> is not a vector; it stands for a three-dimensional volume element in velocity space. If <span class="math notranslate nohighlight">\(f\)</span> is normalized so that</p>
+<div class="math notranslate nohighlight" id="equation-f-normalization">
+<span class="eqno">(3)<a class="headerlink" href="#equation-f-normalization" title="Link to this equation"></a></span>\[\int_{-\infty}^{\infty} \hat{f}(\mathbf{r}, \mathbf{v}, t) \mathrm{d}\mathbf{v} = 1\]</div>
+<p>Thus</p>
+<div class="math notranslate nohighlight" id="equation-f-normalization-dimensionless">
+<span class="eqno">(4)<a class="headerlink" href="#equation-f-normalization-dimensionless" title="Link to this equation"></a></span>\[\hat{f}(\mathbf{r}, \mathbf{v}, t) = f(\mathbf{r}, \mathbf{v}, t) / n(\mathbf{r}, t)\]</div>
+<p>is the probability that a randomly selected particle at position <span class="math notranslate nohighlight">\(\mathbf{r}\)</span> has the velocity <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> at time <span class="math notranslate nohighlight">\(t\)</span>. Using this point of view, we see that averaging over the velocities of all particles at <span class="math notranslate nohighlight">\(x\)</span> gives the mean velocity</p>
+<div class="math notranslate nohighlight" id="equation-distribution-velocity">
+<span class="eqno">(5)<a class="headerlink" href="#equation-distribution-velocity" title="Link to this equation"></a></span>\[u(\mathrm{x},t)=\frac{\int\mathbf{v}f(\mathbf{x},\mathbf{v},t)\mathrm{d}\mathbf{v}}{n(\mathbf{x},t)}\]</div>
+<p>Similarly, multiplying <span class="math notranslate nohighlight">\(\hat{f}\)</span> by <span class="math notranslate nohighlight">\(mv^2/2\)</span> and integrating over velocity will give an expression for the mean kinetic energy of all the particles. This procedure of multiplying <span class="math notranslate nohighlight">\(f\)</span> by various powers of <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> and then integrating over velocity is called <em>taking moments of the distribution function</em>.</p>
+<p>Note that <span class="math notranslate nohighlight">\(\hat{f}\)</span> is still a function of seven variables, since the shape of the distribution, as well as the density, can change with space and time. From <a class="reference internal" href="#equation-f-normalization">(3)</a>, it is clear that <span class="math notranslate nohighlight">\(\hat{f}\)</span> has the dimensions <span class="math notranslate nohighlight">\((\text{m}/\text{s})^{-3}\)</span>; and consequently, from <a class="reference internal" href="#equation-f-normalization-dimensionless">(4)</a>, <span class="math notranslate nohighlight">\(f\)</span> has the dimensions <span class="math notranslate nohighlight">\(\text{s}^3 \text{m}^{-6}\)</span>.</p>
+</section>
+<section id="maxwellian-distribution">
+<h3>Maxwellian Distribution<a class="headerlink" href="#maxwellian-distribution" title="Link to this heading"></a></h3>
+<p>A particularly important distribution function is the Maxwellian:</p>
+<div class="math notranslate nohighlight" id="equation-maxwellian-distribution-normalized">
+<span class="eqno">(6)<a class="headerlink" href="#equation-maxwellian-distribution-normalized" title="Link to this equation"></a></span>\[\hat{f}_m = \left(\frac{m}{2\pi k_B T}\right)^{3/2}\exp\left(-\frac{v^2}{v_{th}^2}\right)\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[v\equiv(v_x^2 + v_y^2 + v_z^2)^{1/2}\quad\text{and}\quad v_{th}\equiv(2k_B T/m)^{1/2}\]</div>
+<p>This is the normalized form where <span class="math notranslate nohighlight">\(\hat{f}_m\)</span> is equivalent to probability: by using the definite integral</p>
+<div class="math notranslate nohighlight">
+\[\int_{-\infty}^{\infty}\exp(-x^2)dx = \sqrt{\pi}\]</div>
+<p>one easily verifies that the integral of <span class="math notranslate nohighlight">\(\hat{f}_m\)</span> over <span class="math notranslate nohighlight">\(\mathrm{d}v_x \mathrm{d}v_y \mathrm{d}v_z\)</span> is unity.</p>
+<p>A common question being asked is:</p>
+<blockquote>
+<div><p>Why do we see Maxwellian/Gaussian/normal distribution ubiquitously in nature?</p>
+</div></blockquote>
+<p>Well, this is related to the <a class="reference external" href="https://en.wikipedia.org/wiki/Central_limit_theorem">central limit theorem</a> in statistics: in many situations, when independent random variables are summed up, their properly normalized sum tends toward a normal distribution even if the original variables themselves are not normally distributed (e.g. a biased coin which give 95% head and 5% tail). In statistical physics, this is related to the fact that a Maxwellian distribution represents the state of a system with the highest entropy under the constraint of energy conservation.</p>
+<p>There are several average velocities of a Maxwellian distribution that are commonly used. The root-mean-square velocity is given by</p>
+<div class="math notranslate nohighlight">
+\[(\overline{v^2})^{1/2} = (3k_B T/m)^{1/2}\]</div>
+<p>The average magnitude of the velocity <span class="math notranslate nohighlight">\(|v|\)</span>, or simply <span class="math notranslate nohighlight">\(\bar{v}\)</span>, is found as follows:</p>
+<div class="math notranslate nohighlight">
+\[\bar{v} = \int_{-\infty}^{\infty}v\hat{f}(\mathbf{v})d^3v\]</div>
+<p>Since <span class="math notranslate nohighlight">\(\hat{f}_m\)</span> is isotropic, the integral is most easily done in spherical coordinates in v space. Since the volume element of each spherical shell is <span class="math notranslate nohighlight">\(4\pi v^2 \mathrm{d}v\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  \bar{v} &amp;= (m/2\pi k_B T)^{3/2}\int_0^\infty v[\exp(-v^2/v_{th}^2)]4\pi v^2 \mathrm{d}v \\
+  &amp;= (\pi v_{th}^2)^{-3/2} 4\pi v_{th}^4 \int_0^\infty [\exp(-y^2)]y^3 dy
+\end{aligned}\end{split}\]</div>
+<p>The definite integral has a value 1/2, found by integration by parts. Thus</p>
+<div class="math notranslate nohighlight">
+\[\bar{v} = 2\sqrt{\pi}v_{th} = 2(2k_B T/\pi m)^{1/2}\]</div>
+<p>The velocity component in a <em>single direction</em>, say <span class="math notranslate nohighlight">\(v_x\)</span>, has a different average. Of course, <span class="math notranslate nohighlight">\(\bar{v}_x\)</span> vanishes for an isotropic distribution; but <span class="math notranslate nohighlight">\(|\bar{v}_x|\)</span> does not:</p>
+<div class="math notranslate nohighlight">
+\[|\bar{v}_x| = \int |v_x|\hat{f}_m(\mathbf{v})\mathrm{d}^3 v = \pi^{-1/2}v_{th} = (2k_B T/\pi m)^{1/2}\]</div>
+<p>To summarize: for a Maxwellian,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+  v_{rms} &amp;= (3k_B T/m)^{1/2} \\
+  |\bar{v}| &amp;= 2(2k_B T/\pi m)^{1/2} \\
+  |\bar{v}_x| &amp;= (2k_B T/\pi m)^{1/2} \\
+  \bar{v}_x &amp;= 0
+\end{aligned}\end{split}\]</div>
+<p>For an isotropic distribution like a Maxwellian, we can define another function <span class="math notranslate nohighlight">\(g(v)\)</span> which is a function of the scalar magnitude of <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> such that</p>
+<div class="math notranslate nohighlight">
+\[\int_0^\infty g(v) \mathrm{d}v = \int_{-\infty}^{\infty} f(\mathbf{v})\mathrm{d}v\]</div>
+<p>For a Maxwellian, we see that</p>
+<div class="math notranslate nohighlight" id="equation-g-dist">
+<span class="eqno">(7)<a class="headerlink" href="#equation-g-dist" title="Link to this equation"></a></span>\[g(v) = 4\pi n (m/2\pi k_B T)^{3/2} v^2 \exp(-v^2/v_{th}^2)\]</div>
+<p>Note the difference between <span class="math notranslate nohighlight">\(g(v)\)</span> and a one-dimensional Maxwellian distribution <span class="math notranslate nohighlight">\(f(v_x)\)</span>. Although <span class="math notranslate nohighlight">\(f(v_x)\)</span> is maximum for <span class="math notranslate nohighlight">\(v_x=0\)</span>, <span class="math notranslate nohighlight">\(g(v)\)</span> is zero for <span class="math notranslate nohighlight">\(v=0\)</span>. This is just a consequence of the vanishing of the volume in phase space for <span class="math notranslate nohighlight">\(v=0\)</span>. Sometimes <span class="math notranslate nohighlight">\(g(v)\)</span> is carelessly denoted by <span class="math notranslate nohighlight">\(f(v)\)</span>, as distinct from <span class="math notranslate nohighlight">\(f(\mathbf{v})\)</span>; but <span class="math notranslate nohighlight">\(g(v)\)</span> is a different function of its argument than <span class="math notranslate nohighlight">\(f(\mathbf{v})\)</span> is of its argument. From <a class="reference internal" href="#equation-g-dist">(7)</a>, it is clear that <span class="math notranslate nohighlight">\(g(v)\)</span> has dimensions <span class="math notranslate nohighlight">\(\text{s}/\text{m}^4\)</span>.</p>
+</section>
+</section>
+<section id="gallery">
+<h2>Gallery<a class="headerlink" href="#gallery" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Isotropic Maxwellian distribution</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\hat{f}_m = \left(\frac{m}{2\pi k_B T}\right)^{3/2}\exp\left(-\frac{v^2}{v_{th}^2}\right)\]</div>
+<ul class="simple">
+<li><p>Anisotropic (pancake) distribution</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[f(v_\perp, v_\parallel) = \frac{n}{T_\perp T_\parallel^{1/2}}\Big( \frac{m}{2\pi k_B} \Big)^{3/2} \exp\Big( -\frac{mv_\perp^2}{2k_B T_\perp} - \frac{m(v_\parallel - v_{0\parallel})^2}{2k_B T_\parallel} \Big)\]</div>
+<ul class="simple">
+<li><p>Beam</p></li>
+<li><p>Crescent shape</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="VDFPy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="distributions.html" class="btn btn-neutral float-right" title="Introduction to General Distribution Functions in Python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

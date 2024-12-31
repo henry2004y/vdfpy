@@ -1,0 +1,47 @@
+vdfpy.generator
+===============
+
+.. py:module:: vdfpy.generator
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/vdfpy/generator/generator/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   vdfpy.generator.make_clusters
+
+
+Package Contents
+----------------
+
+.. py:function:: make_clusters(n_samples: int = 10, n_clusters: int = 2, n_points: int = 100, n_dims: int = 1, *, random_state: int = None, shuffle: bool = False) -> pandas.DataFrame
+
+   Create pseudo-distribution samples for testing the clustering methods.
+
+   :param n_samples: Number of samples. Defaults to 10.
+   :type n_samples: int, optional
+   :param n_clusters: Number of clusters. Defaults to 2.
+   :type n_clusters: int, optional
+   :param n_points: Number of maximum particles in each sampling. Defaults to 100.
+   :type n_points: int, optional
+   :param n_dims: Dimensionality. Defaults to 1.
+   :type n_dims: int, optional
+   :param random_state: Seed for the random number generator. Defaults to None.
+   :type random_state: int, optional
+   :param shuffle: Shuffle the sampling order. Defaults to False.
+   :type shuffle: bool, optional
+
+   :returns: Samples of pseudo-distributions.
+   :rtype: pd.DataFrame
+
+
