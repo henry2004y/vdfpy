@@ -2,6 +2,7 @@ import pytest
 import requests
 import tarfile
 import os
+import sys
 
 from flekspy.util import download_testfile
 
@@ -27,7 +28,10 @@ else:
         os.makedirs(path)
 
     with tarfile.open(testfiles) as file:
-        file.extractall(path)
+        if sys.version_info.major == 3 and sys.version_info.minor >= 12:
+            file.extractall(path, filter='data')
+        else:
+            file.extractall(path)
     os.remove(testfiles)
 
 # Load FLEKS test data

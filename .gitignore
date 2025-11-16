@@ -18,3 +18,7 @@ tests/data/
 
 # Sphinx documentation
 docs/_build/
+
+# Build artifacts
+*.egg-info/
+uv.lock
