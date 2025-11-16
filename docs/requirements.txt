@@ -1,9 +1,0 @@
-flekspy
-myst-nb
-myst-parser
-pyvlasiator
-pyspedas
-seaborn
-sphinx-autoapi
-sphinx-rtd-theme
-umap-learn
