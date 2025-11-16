@@ -16,7 +16,7 @@ def load(filename: str, left_edge=None, right_edge=None) -> pd.DataFrame:
     Returns:
         A pandas DataFrame with 2D particle raw data and moments.
     """
-    ds = fl.load(filename)
+    ds = fl.load(filename, use_yt_loader=True)
     if left_edge is None:
         left_edge = ds.domain_left_edge
     if right_edge is None: 
