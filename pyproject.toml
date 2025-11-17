@@ -19,7 +19,7 @@ dependencies = [
     "pandas>=2.2.3",
     "pyspedas>=1.7.1",
     "umap-learn>=0.5.7",
-    "yt",
+    "yt>=4.3.0,<5",
 ]
 
 [project.optional-dependencies]
