@@ -207,20 +207,16 @@ def sample_mcmc(
     """
     # Initialize the MCMC chain
     total_samples = n_particles + burn_in
-    if n_dims > 1:
-        chain = np.zeros((total_samples, n_dims))
-    else:
-        chain = np.zeros(total_samples)
+    shape = (total_samples, n_dims) if n_dims > 1 else (total_samples,)
+    chain = np.zeros(shape)
     chain[0] = initial_state
     log_prob_current = log_prob_func(initial_state)
 
     # Run the MCMC sampler
     for i in range(1, total_samples):
         # Propose a new state
-        if n_dims > 1:
-            proposal = chain[i - 1] + rng.normal(0, proposal_width, size=n_dims)
-        else:
-            proposal = chain[i - 1] + rng.normal(0, proposal_width)
+        noise_size = n_dims if n_dims > 1 else None
+        proposal = chain[i - 1] + rng.normal(0, proposal_width, size=noise_size)
         # Compute the acceptance ratio
         log_prob_proposal = log_prob_func(proposal)
         log_acceptance_ratio = log_prob_proposal - log_prob_current
