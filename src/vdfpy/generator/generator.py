@@ -134,3 +134,70 @@ def make_clusters(
     df = pd.concat([dclass, d1, d2, d3, d4], axis=1)
 
     return df
+
+
+def sample_box_muller(
+    n_particles: int, bulk_velocity: float, temperature: float
+) -> np.ndarray:
+    """Sample particles from a Maxwellian distribution using the Box-Muller method.
+    Args:
+        n_particles (int): Number of particles to sample.
+        bulk_velocity (float): Bulk velocity of the distribution.
+        temperature (float): Temperature of the distribution.
+    Returns:
+        np.ndarray: Array of particle velocities.
+    """
+    # Generate uniform random numbers
+    u1 = np.random.rand(n_particles // 2)
+    u2 = np.random.rand(n_particles // 2)
+    # Box-Muller transform
+    r = np.sqrt(-2 * np.log(u1))
+    theta = 2 * np.pi * u2
+    x = r * np.cos(theta)
+    y = r * np.sin(theta)
+    # Combine the two sets of random numbers
+    z = np.concatenate((x, y))
+    # If n_particles is odd, generate one more random number
+    if n_particles % 2 != 0:
+        u1 = np.random.rand(1)
+        u2 = np.random.rand(1)
+        r = np.sqrt(-2 * np.log(u1))
+        theta = 2 * np.pi * u2
+        z = np.append(z, r * np.cos(theta))
+
+    # Scale and shift to match the given moments
+    sigma = np.sqrt(temperature)
+    velocities = bulk_velocity + sigma * z
+    return velocities
+
+
+def sample_mcmc(
+    n_particles: int,
+    log_prob_func: callable,
+    initial_state: np.ndarray,
+    proposal_width: float = 1.0,
+) -> np.ndarray:
+    """Sample particles from a custom distribution using the MCMC method.
+    Args:
+        n_particles (int): Number of particles to sample.
+        log_prob_func (callable): Function that computes the log probability of the distribution.
+        initial_state (np.ndarray): Initial state for the MCMC sampler.
+        proposal_width (float, optional): Width of the proposal distribution. Defaults to 1.0.
+    Returns:
+        np.ndarray: Array of particle velocities.
+    """
+    # Initialize the MCMC chain
+    chain = np.zeros(n_particles)
+    chain[0] = initial_state
+    # Run the MCMC sampler
+    for i in range(1, n_particles):
+        # Propose a new state
+        proposal = chain[i - 1] + np.random.normal(0, proposal_width)
+        # Compute the acceptance ratio
+        log_acceptance_ratio = log_prob_func(proposal) - log_prob_func(chain[i - 1])
+        # Accept or reject the proposal
+        if np.log(np.random.rand()) < log_acceptance_ratio:
+            chain[i] = proposal
+        else:
+            chain[i] = chain[i - 1]
+    return chain

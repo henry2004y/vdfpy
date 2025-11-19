@@ -1,1 +1,1 @@
-from .generator import make_clusters
+from .generator import make_clusters, sample_box_muller, sample_mcmc
