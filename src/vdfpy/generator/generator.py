@@ -137,33 +137,34 @@ def make_clusters(
 
 
 def sample_box_muller(
-    n_particles: int, bulk_velocity: float, temperature: float
+    n_particles: int, bulk_velocity: float, temperature: float, *, rng: np.random.Generator = None
 ) -> np.ndarray:
     """Sample particles from a Maxwellian distribution using the Box-Muller method.
     Args:
         n_particles (int): Number of particles to sample.
         bulk_velocity (float): Bulk velocity of the distribution.
         temperature (float): Temperature of the distribution.
+        rng (np.random.Generator, optional): Random number generator instance. Defaults to None.
     Returns:
         np.ndarray: Array of particle velocities.
     """
-    # Generate uniform random numbers
-    u1 = np.random.rand(n_particles // 2)
-    u2 = np.random.rand(n_particles // 2)
-    # Box-Muller transform
+    if rng is None:
+        rng = np.random.default_rng()
+
+    # We need n_particles samples, Box-Muller generates pairs of samples.
+    # So we generate ceil(n_particles / 2) pairs.
+    num_pairs = (n_particles + 1) // 2
+    u1 = rng.random(num_pairs)
+    u2 = rng.random(num_pairs)
+
+    # Box-Muller transform for standard normal
     r = np.sqrt(-2 * np.log(u1))
     theta = 2 * np.pi * u2
     x = r * np.cos(theta)
     y = r * np.sin(theta)
-    # Combine the two sets of random numbers
-    z = np.concatenate((x, y))
-    # If n_particles is odd, generate one more random number
-    if n_particles % 2 != 0:
-        u1 = np.random.rand(1)
-        u2 = np.random.rand(1)
-        r = np.sqrt(-2 * np.log(u1))
-        theta = 2 * np.pi * u2
-        z = np.append(z, r * np.cos(theta))
+
+    # Combine and truncate to get n_particles samples
+    z = np.concatenate((x, y))[:n_particles]
 
     # Scale and shift to match the given moments
     sigma = np.sqrt(temperature)
@@ -174,30 +175,40 @@ def sample_box_muller(
 def sample_mcmc(
     n_particles: int,
     log_prob_func: callable,
-    initial_state: np.ndarray,
+    initial_state: float,
+    rng: np.random.Generator,
     proposal_width: float = 1.0,
+    burn_in: int = 100,
 ) -> np.ndarray:
     """Sample particles from a custom distribution using the MCMC method.
     Args:
         n_particles (int): Number of particles to sample.
         log_prob_func (callable): Function that computes the log probability of the distribution.
-        initial_state (np.ndarray): Initial state for the MCMC sampler.
+        initial_state (float): Initial state for the MCMC sampler.
+        rng (np.random.Generator): Random number generator.
         proposal_width (float, optional): Width of the proposal distribution. Defaults to 1.0.
+        burn_in (int, optional): Number of burn-in samples to discard. Defaults to 100.
     Returns:
         np.ndarray: Array of particle velocities.
     """
     # Initialize the MCMC chain
-    chain = np.zeros(n_particles)
+    total_samples = n_particles + burn_in
+    chain = np.zeros(total_samples)
     chain[0] = initial_state
+    log_prob_current = log_prob_func(initial_state)
+
     # Run the MCMC sampler
-    for i in range(1, n_particles):
+    for i in range(1, total_samples):
         # Propose a new state
-        proposal = chain[i - 1] + np.random.normal(0, proposal_width)
+        proposal = chain[i - 1] + rng.normal(0, proposal_width)
         # Compute the acceptance ratio
-        log_acceptance_ratio = log_prob_func(proposal) - log_prob_func(chain[i - 1])
+        log_prob_proposal = log_prob_func(proposal)
+        log_acceptance_ratio = log_prob_proposal - log_prob_current
         # Accept or reject the proposal
-        if np.log(np.random.rand()) < log_acceptance_ratio:
+        if np.log(rng.random()) < log_acceptance_ratio:
             chain[i] = proposal
+            log_prob_current = log_prob_proposal
         else:
             chain[i] = chain[i - 1]
-    return chain
+
+    return chain[burn_in:]
