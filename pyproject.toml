@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vdfpy"
-version = "0.1.1"
+version = "0.1.2"
 description = "Velocity distribution function classifier"
 authors = [
   { name="Hongyang Zhou", email="hyzhou@umich.edu" },
