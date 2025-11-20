@@ -2,7 +2,7 @@
 
 import pandas as pd
 import numpy as np
-import flekspy as fl
+import flekspy as fs
 
 
 def load(filename: str, left_edge=None, right_edge=None) -> pd.DataFrame:
@@ -16,7 +16,7 @@ def load(filename: str, left_edge=None, right_edge=None) -> pd.DataFrame:
     Returns:
         A pandas DataFrame with 2D particle raw data and moments.
     """
-    ds = fl.load(filename, use_yt_loader=True)
+    ds = fs.load(filename, use_yt_loader=True)
     if left_edge is None:
         left_edge = ds.domain_left_edge
     if right_edge is None: 
@@ -35,8 +35,8 @@ def load(filename: str, left_edge=None, right_edge=None) -> pd.DataFrame:
 
     return df
 
-
+#TODO: implement the loader!
 def collect_moments(filename: str, preprocessed: bool = True) -> pd.DataFrame:
-    ds = fl.load(filename)
+    ds = fs.load(filename, use_yt_loader=True)
 
     return
