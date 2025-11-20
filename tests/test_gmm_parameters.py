@@ -3,8 +3,7 @@ import pytest
 from sklearn.mixture import GaussianMixture
 from unittest.mock import MagicMock
 
-from flekspy.util.gmm import get_gmm_parameters
-from flekspy.amrex.particle_data import AMReXParticleData
+from vdfpy.generator import get_gmm_parameters
 
 
 @pytest.fixture

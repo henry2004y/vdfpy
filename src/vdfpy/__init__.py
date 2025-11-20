@@ -5,6 +5,7 @@ vdfpy Public API.
 from .clustering import cluster
 import vdfpy.vlasiator as vlasiator
 import vdfpy.fleks as fleks
+import vdfpy.generator as generator
 
 import pandas as pd
 
