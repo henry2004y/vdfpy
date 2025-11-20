@@ -273,7 +273,7 @@ def generate_synthetic_gmm_data(components: List[Dict[str, Any]],
     synthetic_data = np.vstack(all_data)
 
     if shuffle:
-        np.random.shuffle(synthetic_data)
+        rng.shuffle(synthetic_data)
 
     return synthetic_data
 
