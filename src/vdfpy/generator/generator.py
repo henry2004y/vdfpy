@@ -326,18 +326,17 @@ def compare_gmm_results(original_params: List[Dict[str, Any]],
                   f"v_th_sq_parallel = {v_th_sq_par}, "
                   f"v_th_sq_perp = {v_th_sq_per}")
 
-def get_gmm_parameters(gmm: "GaussianMixture",
+def get_gmm_parameters(gmm: GaussianMixture,
                        isotropic: bool = True) -> List[dict]:
     """
     Extracts physical parameters from a fitted GMM.
 
     This method returns the squared thermal velocities (variances) from the
-    covariance matrix of the GM
-    M components. It does not perform any unit
+    covariance matrix of the GMM components. It does not perform any unit
     conversions.
 
     Args:
-        gmm ("GaussianMixture"): The fitted GMM model.
+        gmm (GaussianMixture): The fitted GMM model.
         isotropic (bool, optional): If True, assumes an isotropic Maxwellian
                                     distribution and returns a single scalar v_th_sq.
                                     If False, assumes a Bi-Maxwellian distribution and returns
