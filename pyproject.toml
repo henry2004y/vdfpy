@@ -17,7 +17,7 @@ dependencies = [
     "scikit-learn>=1.5.2",
     "scipy>=1.14.1",
     "pandas>=2.2.3",
-    "pyspedas>=1.7.1",
+    "pyspedas>=2.0.0",
     "umap-learn>=0.5.7",
     "yt>=4.3.0,<5",
 ]
