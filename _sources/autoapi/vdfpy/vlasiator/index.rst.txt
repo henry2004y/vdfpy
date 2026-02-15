@@ -1,0 +1,28 @@
+vdfpy.vlasiator
+===============
+
+.. py:module:: vdfpy.vlasiator
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/vdfpy/vlasiator/vlasiator/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   vdfpy.vlasiator.collect_moments
+
+
+Package Contents
+----------------
+
+.. py:function:: collect_moments(filename: str, preprocessed: bool = True) -> pandas.DataFrame
+

@@ -1,0 +1,36 @@
+vdfpy.clustering
+================
+
+.. py:module:: vdfpy.clustering
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   vdfpy.clustering.cluster
+
+
+Module Contents
+---------------
+
+.. py:function:: cluster(df, method: str = 'kmeans', n_clusters: int = 2, *, verbose: bool = True) -> numpy.ndarray
+
+   Clustering input data into n_clusters with a selected method.
+
+   :param df: input data in the form of a DataFrame or ndarray.
+   :type df: _type_
+   :param method: clustering method. Defaults to "kmeans".
+   :type method: str, optional
+   :param n_clusters: number of clusters. Defaults to 2.
+   :type n_clusters: int, optional
+   :param verbose: logging information. Defaults to True.
+   :type verbose: bool, optional
+
+   :raises Exception: when the prescribed method is not implemented.
+
+   :returns: labels of classes as integers.
+   :rtype: np.ndarray
+
+

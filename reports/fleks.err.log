@@ -1,0 +1,51 @@
+Traceback (most recent call last):
+  File "/home/runner/work/vdfpy/vdfpy/.venv/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/runner/work/vdfpy/vdfpy/.venv/lib/python3.12/site-packages/nbclient/client.py", line 1323, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/vdfpy/vdfpy/.venv/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/share/uv/python/cpython-3.12.5-linux-x86_64-gnu/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/runner/work/vdfpy/vdfpy/.venv/lib/python3.12/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/home/runner/work/vdfpy/vdfpy/.venv/lib/python3.12/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/runner/work/vdfpy/vdfpy/.venv/lib/python3.12/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import vdfpy.fleks
+import flekspy
+import logging
+import yt
+
+# Set the logging level for yt to WARNING to suppress outputs
+yt.funcs.mylog.setLevel(logging.WARNING)
+
+file = "data/3d_*amrex"
+ds = flekspy.load(file)
+
+left_edge = ds.domain_left_edge
+right_edge = [*ds.domain_center[0:2], ds.domain_right_edge[2]]
+df1 = vdfpy.fleks.load(file, left_edge, right_edge)
+left_edge = [*ds.domain_center[0:2], ds.domain_left_edge[2]]
+right_edge = ds.domain_right_edge
+df2 = vdfpy.fleks.load(file, left_edge, right_edge)
+------------------
+
+
+[31m---------------------------------------------------------------------------[39m
+[31mAttributeError[39m                            Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[2][39m[32m, line 12[39m
+[32m      9[39m file = [33m"[39m[33mdata/3d_*amrex[39m[33m"[39m
+[32m     10[39m ds = flekspy.load(file)
+[32m---> [39m[32m12[39m left_edge = [43mds[49m[43m.[49m[43mdomain_left_edge[49m
+[32m     13[39m right_edge = [*ds.domain_center[[32m0[39m:[32m2[39m], ds.domain_right_edge[[32m2[39m]]
+[32m     14[39m df1 = vdfpy.fleks.load(file, left_edge, right_edge)
+
+[31mAttributeError[39m: 'AMReXParticle' object has no attribute 'domain_left_edge'
+

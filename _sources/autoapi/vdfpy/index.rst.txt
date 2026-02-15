@@ -1,0 +1,74 @@
+vdfpy
+=====
+
+.. py:module:: vdfpy
+
+.. autoapi-nested-parse::
+
+   vdfpy Public API.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/vdfpy/clustering/index
+   /autoapi/vdfpy/fleks/index
+   /autoapi/vdfpy/generator/index
+   /autoapi/vdfpy/spedas/index
+   /autoapi/vdfpy/vdfpy/index
+   /autoapi/vdfpy/vlasiator/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   vdfpy.cluster
+   vdfpy.collect_moments
+   vdfpy.load_mms
+
+
+Package Contents
+----------------
+
+.. py:function:: cluster(df, method: str = 'kmeans', n_clusters: int = 2, *, verbose: bool = True) -> numpy.ndarray
+
+   Clustering input data into n_clusters with a selected method.
+
+   :param df: input data in the form of a DataFrame or ndarray.
+   :type df: _type_
+   :param method: clustering method. Defaults to "kmeans".
+   :type method: str, optional
+   :param n_clusters: number of clusters. Defaults to 2.
+   :type n_clusters: int, optional
+   :param verbose: logging information. Defaults to True.
+   :type verbose: bool, optional
+
+   :raises Exception: when the prescribed method is not implemented.
+
+   :returns: labels of classes as integers.
+   :rtype: np.ndarray
+
+
+.. py:function:: collect_moments(filename: str, preprocessed: bool = True) -> pandas.DataFrame
+
+   Collect plasma moments from data.
+
+   :param filename: Input file name.
+   :type filename: str
+   :param preprocessed: Whether to use moments output directly. Defaults to True.
+   :type preprocessed: bool, optional
+
+   :raises NameError: If the file name is not recognized.
+
+   :returns: Pandas DataFrame for storing moments.
+   :rtype: pd.DataFrame
+
+
+.. py:function:: load_mms(filename: str)
+

@@ -1,0 +1,160 @@
+vdfpy.generator
+===============
+
+.. py:module:: vdfpy.generator
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/vdfpy/generator/generator/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   vdfpy.generator.make_clusters
+   vdfpy.generator.sample_box_muller
+   vdfpy.generator.sample_mcmc
+   vdfpy.generator.get_gmm_parameters
+   vdfpy.generator.generate_synthetic_gmm_data
+   vdfpy.generator.compare_gmm_results
+
+
+Package Contents
+----------------
+
+.. py:function:: make_clusters(n_samples: int = 10, n_clusters: int = 2, n_points: int = 100, n_dims: int = 1, *, random_state: int = None, shuffle: bool = False) -> pandas.DataFrame
+
+   Create pseudo-distribution samples for testing the clustering methods.
+
+   :param n_samples: Number of samples. Defaults to 10.
+   :type n_samples: int, optional
+   :param n_clusters: Number of clusters. Defaults to 2.
+   :type n_clusters: int, optional
+   :param n_points: Number of maximum particles in each sampling. Defaults to 100.
+   :type n_points: int, optional
+   :param n_dims: Dimensionality. Defaults to 1.
+   :type n_dims: int, optional
+   :param random_state: Seed for the random number generator. Defaults to None.
+   :type random_state: int, optional
+   :param shuffle: Shuffle the sampling order. Defaults to False.
+   :type shuffle: bool, optional
+
+   :returns: Samples of pseudo-distributions.
+   :rtype: pd.DataFrame
+
+
+.. py:function:: sample_box_muller(n_particles: int, bulk_velocity: float, temperature: float, *, n_dims: int = 1, rng: numpy.random.Generator = None) -> numpy.ndarray
+
+   Sample particles from a Maxwellian distribution using the Box-Muller method.
+   :param n_particles: Number of particles to sample.
+   :type n_particles: int
+   :param bulk_velocity: Bulk velocity of the distribution.
+   :type bulk_velocity: float
+   :param temperature: Temperature of the distribution.
+   :type temperature: float
+   :param n_dims: The number of dimensions. Defaults to 1.
+   :type n_dims: int, optional
+   :param rng: Random number generator instance. Defaults to None.
+   :type rng: np.random.Generator, optional
+
+   :returns: Array of particle velocities.
+   :rtype: np.ndarray
+
+
+.. py:function:: sample_mcmc(n_particles: int, log_prob_func: callable, initial_state: Union[float, numpy.ndarray], rng: numpy.random.Generator, n_dims: int = 1, proposal_width: float = 1.0, burn_in: int = 100) -> numpy.ndarray
+
+   Sample particles from a custom distribution using the MCMC method.
+   :param n_particles: Number of particles to sample.
+   :type n_particles: int
+   :param log_prob_func: Function that computes the log probability of the distribution.
+   :type log_prob_func: callable
+   :param initial_state: Initial state for the MCMC sampler.
+   :type initial_state: Union[float, np.ndarray]
+   :param rng: Random number generator.
+   :type rng: np.random.Generator
+   :param n_dims: The number of dimensions. Defaults to 1.
+   :type n_dims: int, optional
+   :param proposal_width: Width of the proposal distribution. Defaults to 1.0.
+   :type proposal_width: float, optional
+   :param burn_in: Number of burn-in samples to discard. Defaults to 100.
+   :type burn_in: int, optional
+
+   :returns: Array of particle velocities.
+   :rtype: np.ndarray
+
+
+.. py:function:: get_gmm_parameters(gmm: sklearn.mixture.GaussianMixture, isotropic: bool = True) -> List[dict]
+
+   Extracts physical parameters from a fitted GMM.
+
+   This method returns the squared thermal velocities (variances) from the
+   covariance matrix of the GMM components. It does not perform any unit
+   conversions.
+
+   :param gmm: The fitted GMM model.
+   :type gmm: GaussianMixture
+   :param isotropic: If True, assumes an isotropic Maxwellian
+                     distribution and returns a single scalar v_th_sq.
+                     If False, assumes a Bi-Maxwellian distribution and returns
+                     parallel and perpendicular components. Defaults to True.
+   :type isotropic: bool, optional
+
+   :returns:
+
+             A list of dictionaries, one for each Gaussian component.
+                           - Isotropic: {'center': [mx, my], 'v_th_sq': v_sq}
+                           - Bi-Maxwellian: {'center': [mx, my], 'v_parallel_sq': v_par_sq, 'v_perp_sq': v_perp_sq}
+   :rtype: list of dict
+
+
+.. py:function:: generate_synthetic_gmm_data(components: List[Dict[str, Any]], shuffle: bool = True, random_state: int = 0) -> numpy.ndarray
+
+   Generates synthetic data for a Gaussian Mixture Model (GMM).
+
+   This function creates a dataset composed of multiple Gaussian distributions,
+   each defined by a set of parameters.
+
+   :param components: A list of dictionaries, where each dictionary defines a Gaussian
+                      component and must contain the following keys:
+                      - 'n_samples': The number of samples to generate for this component.
+                      - 'mean': A NumPy array representing the mean of the distribution.
+                      - 'cov': A NumPy array representing the covariance matrix.
+   :type components: List[Dict[str, Any]]
+   :param shuffle: If True (default), the generated data from all components will be
+                   shuffled to mix the populations.
+   :type shuffle: bool, optional
+   :param random_state: A seed for the random number generator to ensure reproducibility.
+                        Defaults to 0.
+   :type random_state: int, optional
+
+   :returns: A NumPy array containing the combined and shuffled synthetic data.
+             The shape of the array will be (total_samples, n_features).
+   :rtype: np.ndarray
+
+
+.. py:function:: compare_gmm_results(original_params: List[Dict[str, Any]], gmm_fit: sklearn.mixture.GaussianMixture, isotropic: bool) -> None
+
+   Prints a comparison of original and GMM-fitted parameters.
+
+   This utility function provides a clear, side-by-side view of the
+   parameters used to generate synthetic data and those extracted by the GMM.
+
+   :param original_params: A list of dictionaries, where each dictionary contains the original
+                           parameters for a synthetic data component. For isotropic cases,
+                           it must contain 'center' and 'temp' keys. For anisotropic cases, it
+                           must contain 'center', 'temp_parallel', and 'temp_perp'.
+   :type original_params: List[Dict[str, Any]]
+   :param gmm_fit: The fitted `sklearn.mixture.GaussianMixture` object.
+   :type gmm_fit: GaussianMixture
+   :param isotropic: A flag indicating whether the comparison should be for isotropic or
+                     anisotropic parameters.
+   :type isotropic: bool
+
+

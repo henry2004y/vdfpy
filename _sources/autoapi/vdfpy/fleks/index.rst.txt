@@ -1,0 +1,41 @@
+vdfpy.fleks
+===========
+
+.. py:module:: vdfpy.fleks
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/vdfpy/fleks/fleks/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   vdfpy.fleks.collect_moments
+   vdfpy.fleks.load
+
+
+Package Contents
+----------------
+
+.. py:function:: collect_moments(filename: str, preprocessed: bool = True) -> pandas.DataFrame
+
+.. py:function:: load(filename: str, left_edge=None, right_edge=None) -> pandas.DataFrame
+
+   Return a dataframe from FLEKS particle data.
+
+   :param filename: FLEKS output file directory.
+   :type filename: str
+   :param left_edge: box left edges for the selected particles. If None, choose the whole domain.
+   :param right_edge: box left edges for the selected particles. If None, choose the whole domain.
+
+   :returns: A pandas DataFrame with 2D particle raw data and moments.
+
+
